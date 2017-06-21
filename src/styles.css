@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+#sidebar {
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    background-color: #2d3745;
+}
+
+#sidebar a {
+    color: #faaa3C;
+}
+
+#sidebar ul,
+.vsm-content {
+    padding: 15px 0 0 15px;
+}
