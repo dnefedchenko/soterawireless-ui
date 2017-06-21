@@ -1,5 +1,22 @@
 <div class="card">
     <div class="card-block">
-        <h4 class="card-title">Facility Configuration</h4>
+
+        <p>Form value: {{ facilityForm.value | json }}</p>
+        <p>Form status: {{ facilityForm.status | json }}</p>
+
+        <form [formGroup]="facilityForm">
+            <h4 class="card-title">Facility Configuration</h4>
+
+            <div class="col-md-4">
+                <fieldset class="vsm-scheduler-border">
+                    <legend>General System Settings</legend>
+
+                    <div class="form-group">
+                        <label for="facilityNameInput">Facility Name:</label>
+                        <input id="facilityNameInput" type="text" class="form-control" formControlName="facilityName">
+                    </div>
+                </fieldset>
+            </div>
+        </form>
     </div>
 </div>

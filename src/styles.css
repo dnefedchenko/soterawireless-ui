@@ -13,3 +13,15 @@
 .vsm-content {
     padding: 15px 0 0 15px;
 }
+
+fieldset.vsm-scheduler-border {
+    border: 1px solid !important;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 5px;
+}
+
+.vsm-scheduler-border legend {
+    width: auto;
+    padding: 0 10px;
+}
