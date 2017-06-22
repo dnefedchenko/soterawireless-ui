@@ -1,3 +1,161 @@
+@font-face {
+    font-family: 'visi-ico';
+    src:    url('assets/fonts/visi-ico.eot?ix5n72');
+    src:    url('assets/fonts/visi-ico.eot?ix5n72#iefix') format('embedded-opentype'),
+    url('assets/fonts/visi-ico.ttf?ix5n72') format('truetype'),
+    url('assets/fonts/visi-ico.woff?ix5n72') format('woff'),
+    url('assets/fonts/visi-ico.svg?ix5n72#visi-ico') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="ico-"], [class*=" ico-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'visi-ico' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ico-logo-visi:before {
+    content: "\e900";
+}
+
+.ico-logo-text-mobile:before {
+    content: "\e901";
+}
+
+.ico-logo-text-eye:before {
+    content: "\e902";
+}
+
+.ico-user:before {
+    content: "\e903";
+}
+
+.ico-users:before {
+    content: "\e904";
+}
+
+.ico-home:before {
+    content: "\e905";
+}
+
+.ico-lock:before {
+    content: "\e906";
+}
+
+.ico-search:before {
+    content: "\e907";
+}
+
+.ico-arrow-uparrow-top:before {
+    content: "\e908";
+}
+
+.ico-arrow-down:before {
+    content: "\e909";
+}
+
+.ico-arrow-left:before {
+    content: "\e90a";
+}
+
+.ico-arrow-right:before {
+    content: "\e90b";
+}
+
+.ico-close:before {
+    content: "\e90c";
+}
+
+.ico-log-out:before {
+    content: "\e90d";
+}
+
+.ico-check:before {
+    content: "\e90e";
+}
+
+.ico-plus:before {
+    content: "\e90f";
+}
+
+.ico-minus:before {
+    content: "\e910";
+}
+
+.ico-trash:before {
+    content: "\e911";
+}
+
+.ico-grid:before {
+    content: "\e912";
+}
+
+.ico-list:before {
+    content: "\e913";
+}
+
+.ico-cog:before {
+    content: "\e914";
+}
+
+.ico-user-card:before {
+    content: "\e915";
+}
+
+.ico-servers:before {
+    content: "\e916";
+}
+
+.ico-piechart:before {
+    content: "\e917";
+}
+
+.ico-clock:before {
+    content: "\e918";
+}
+
+.ico-calendar:before {
+    content: "\e919";
+}
+
+.ico-speaker:before {
+    content: "\e91a";
+}
+
+.ico-barchart:before {
+    content: "\e91b";
+}
+
+.ico-mail:before {
+    content: "\e91c";
+}
+
+.ico-clipboard:before {
+    content: "\e91d";
+}
+
+.ico-ldap:before {
+    content: "\e91e";
+}
+
+.ico-dots-centered:before {
+    content: "\e91f";
+}
+
+.ico-ext-link:before {
+    content: "\e920";
+}
+
 #sidebar {
     position: fixed;
     bottom: 0;
@@ -24,4 +182,52 @@ fieldset.vsm-scheduler-border {
 .vsm-scheduler-border legend {
     width: auto;
     padding: 0 10px;
+}
+
+.form-group .vsm-checkbox {
+    position: relative;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.form-group .vsm-checkbox input[type="checkbox"] {
+    display:none;
+}
+
+.form-group .vsm-checkbox input[type="checkbox"] + label:before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 1px solid;
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    margin-right: .3em;
+    margin-bottom: -.15em;
+    box-sizing: border-box;
+}
+
+.form-group .vsm-checkbox input[type="checkbox"]:checked + label:after {
+    font-family: 'visi-ico' !important;
+    content: "\e90e";
+    position: absolute;
+    left: 0.35em;
+    top: 0.5em;
+    font-size: 0.6em;
+    color: #FFFFFF;
+}
+
+.form-group .vsm-checkbox input[type="checkbox"]:checked + label.blue:before {
+    background-color: #00ACEC;
+    border: none;
+}
+
+.form-group .vsm-checkbox input[type="checkbox"]:checked + label.green:before {
+    background-color: #82C341;
+    border: none;
+}
+
+.vsm-label {
+    font-style: italic;
+    font-weight: bold;
 }

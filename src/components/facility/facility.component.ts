@@ -13,7 +13,23 @@ export class FacilityComponent implements OnInit {
 
     ngOnInit(): void {
         this.facilityForm = this.formBuilder.group({
-            facilityName: ['', Validators.required]
+            name: ['', Validators.required],
+            adtEnabled: false,
+            nonAdtRequiredFieldLabel: '',
+            temperatureDisplay: '',
+            temperatureUnitsOfMeasure: '',
+            respirationDisplay: '',
+            bloodPressureUnitsOfMeasure: '',
+            dateFormat: '',
+            timeFormat: '',
+            rvdAdminPinCodeValue: '',
+            accessTimeout: '',
+            filterFrequency: '',
+            screenTimeout: '',
+            customDelay: '',
+            clinicianPinCodeValue: '',
+            arrhythmiaAlarmsEnabled: '',
+            postureAlarmsEnabled: ''
         });
     }
 }

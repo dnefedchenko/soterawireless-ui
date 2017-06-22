@@ -12,8 +12,54 @@
                     <legend>General System Settings</legend>
 
                     <div class="form-group">
-                        <label for="facilityNameInput">Facility Name:</label>
-                        <input id="facilityNameInput" type="text" class="form-control" formControlName="facilityName">
+                        <label for="facilityNameInput" class="vsm-label">Facility Name:</label>
+                        <input id="facilityNameInput" type="text" class="form-control" formControlName="name">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="vsm-checkbox">
+                            <input id="adtEnabled" type="checkbox" formControlName="adtEnabled">
+                            <label for="adtEnabled" class="vsm-label blue">&nbsp;ADT Enabled</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nonAdtEnabledLabel" class="vsm-label">Non ADT Required Field Label:</label>
+                        <input id="nonAdtEnabledLabel" type="text" class="form-control" formControlName="nonAdtRequiredFieldLabel">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="vsm-checkbox">
+                            <input id="temperatureDisplay" type="checkbox" formControlName="temperatureDisplay">
+                            <label for="temperatureDisplay" class="vsm-label blue">&nbsp;Temperature Display:</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="temperatureUnitsOfMeasureInput" class="vsm-label">Temperature Units Of Measure:</label>
+                        <input id="temperatureUnitsOfMeasureInput" type="text" class="form-control" formControlName="temperatureUnitsOfMeasure">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="vsm-checkbox">
+                            <input id="respirationDisplay" type="checkbox" formControlName="respirationDisplay">
+                            <label for="respirationDisplay" class="vsm-label blue">&nbsp;Respiration Display:</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bloodPressureUnitsOfMeasureInput" class="vsm-label">Blood Pressure Units Of Measure:</label>
+                        <input id="bloodPressureUnitsOfMeasureInput" type="text" class="form-control" formControlName="bloodPressureUnitsOfMeasure">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateFormatInput" class="vsm-label">Date Format:</label>
+                        <input id="dateFormatInput" type="text" class="form-control" formControlName="dateFormat">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timeFormatInput" class="vsm-label">Time Format:</label>
+                        <input id="timeFormatInput" type="text" class="form-control" formControlName="timeFormat">
                     </div>
                 </fieldset>
             </div>
