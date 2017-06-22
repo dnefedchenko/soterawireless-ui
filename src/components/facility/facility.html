@@ -1,68 +1,136 @@
 <div class="card">
     <div class="card-block">
 
-        <p>Form value: {{ facilityForm.value | json }}</p>
-        <p>Form status: {{ facilityForm.status | json }}</p>
+        <!--<p>Form value: {{ facilityForm.value | json }}</p>
+        <p>Form status: {{ facilityForm.status | json }}</p>-->
 
         <form [formGroup]="facilityForm">
-            <h4 class="card-title">Facility Configuration</h4>
+            <h3 class="card-title">Facility Configuration</h3>
 
-            <div class="col-md-4">
-                <fieldset class="vsm-scheduler-border">
-                    <legend>General System Settings</legend>
+            <div class="row">
+                <div class="col-md-4">
+                    <fieldset class="vsm-scheduler-border vsm-padding-bottom-51">
+                        <legend>General System Settings</legend>
 
-                    <div class="form-group">
-                        <label for="facilityNameInput" class="vsm-label">Facility Name:</label>
-                        <input id="facilityNameInput" type="text" class="form-control" formControlName="name">
-                    </div>
-
-                    <div class="form-group">
-                        <div class="vsm-checkbox">
-                            <input id="adtEnabled" type="checkbox" formControlName="adtEnabled">
-                            <label for="adtEnabled" class="vsm-label blue">&nbsp;ADT Enabled</label>
+                        <div class="form-group">
+                            <label for="facilityNameInput" class="vsm-label">Facility Name:</label>
+                            <input id="facilityNameInput" type="text" class="form-control" formControlName="name">
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="nonAdtEnabledLabel" class="vsm-label">Non ADT Required Field Label:</label>
-                        <input id="nonAdtEnabledLabel" type="text" class="form-control" formControlName="nonAdtRequiredFieldLabel">
-                    </div>
-
-                    <div class="form-group">
-                        <div class="vsm-checkbox">
-                            <input id="temperatureDisplay" type="checkbox" formControlName="temperatureDisplay">
-                            <label for="temperatureDisplay" class="vsm-label blue">&nbsp;Temperature Display:</label>
+                        <div class="form-group">
+                            <div class="vsm-checkbox">
+                                <input id="adtEnabled" type="checkbox" formControlName="adtEnabled">
+                                <label for="adtEnabled" class="vsm-label blue">&nbsp;ADT Enabled</label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="temperatureUnitsOfMeasureInput" class="vsm-label">Temperature Units Of Measure:</label>
-                        <input id="temperatureUnitsOfMeasureInput" type="text" class="form-control" formControlName="temperatureUnitsOfMeasure">
-                    </div>
-
-                    <div class="form-group">
-                        <div class="vsm-checkbox">
-                            <input id="respirationDisplay" type="checkbox" formControlName="respirationDisplay">
-                            <label for="respirationDisplay" class="vsm-label blue">&nbsp;Respiration Display:</label>
+                        <div class="form-group">
+                            <label for="nonAdtEnabledLabel" class="vsm-label">Non ADT Required Field Label:</label>
+                            <input id="nonAdtEnabledLabel" type="text" class="form-control" formControlName="nonAdtRequiredFieldLabel">
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="bloodPressureUnitsOfMeasureInput" class="vsm-label">Blood Pressure Units Of Measure:</label>
-                        <input id="bloodPressureUnitsOfMeasureInput" type="text" class="form-control" formControlName="bloodPressureUnitsOfMeasure">
-                    </div>
+                        <div class="form-group">
+                            <div class="vsm-checkbox">
+                                <input id="temperatureDisplay" type="checkbox" formControlName="temperatureDisplay">
+                                <label for="temperatureDisplay" class="vsm-label blue">&nbsp;Temperature Display:</label>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="dateFormatInput" class="vsm-label">Date Format:</label>
-                        <input id="dateFormatInput" type="text" class="form-control" formControlName="dateFormat">
-                    </div>
+                        <div class="form-group">
+                            <label for="temperatureUnitsOfMeasureInput" class="vsm-label">Temperature Units Of Measure:</label>
+                            <input id="temperatureUnitsOfMeasureInput" type="text" class="form-control" formControlName="temperatureUnitsOfMeasure">
+                        </div>
 
-                    <div class="form-group">
-                        <label for="timeFormatInput" class="vsm-label">Time Format:</label>
-                        <input id="timeFormatInput" type="text" class="form-control" formControlName="timeFormat">
-                    </div>
-                </fieldset>
+                        <div class="form-group">
+                            <div class="vsm-checkbox">
+                                <input id="respirationDisplay" type="checkbox" formControlName="respirationDisplay">
+                                <label for="respirationDisplay" class="vsm-label blue">&nbsp;Respiration Display:</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bloodPressureUnitsOfMeasureInput" class="vsm-label">Blood Pressure Units Of Measure:</label>
+                            <input id="bloodPressureUnitsOfMeasureInput" type="text" class="form-control" formControlName="bloodPressureUnitsOfMeasure">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dateFormatInput" class="vsm-label">Date Format:</label>
+                            <input id="dateFormatInput" type="text" class="form-control" formControlName="dateFormat">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="timeFormatInput" class="vsm-label">Time Format:</label>
+                            <input id="timeFormatInput" type="text" class="form-control" formControlName="timeFormat">
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="col-md-4">
+                    <fieldset class="vsm-scheduler-border">
+                        <legend>RVD Settings</legend>
+
+                        <div class="form-group">
+                            <label for="rvdAdminPinCodeInput" class="vsm-label">Admin Pin Code:</label>
+                            <input id="rvdAdminPinCodeInput" type="text" class="form-control" formControlName="rvdAdminPinCodeValue">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accessTimeoutInput" class="vsm-label">Access Timeout:</label>
+                            <input id="accessTimeoutInput" type="text" class="form-control" formControlName="accessTimeout">
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="vsm-scheduler-border">
+                        <legend>ViSi Monitor Settings</legend>
+
+                        <div class="form-group">
+                            <label for="filterFrequencyInput" class="vsm-label">ECG Line Noise Filter:</label>
+                            <input id="filterFrequencyInput" type="text" class="form-control" formControlName="filterFrequency">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="screenTimeoutInput" class="vsm-label">Screen Timeout:</label>
+                            <input id="screenTimeoutInput" type="text" class="form-control" formControlName="screenTimeout">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customDelayInput" class="vsm-label">Custom Delay:</label>
+                            <input id="customDelayInput" type="text" class="form-control" formControlName="customDelay">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="vsm-checkbox">
+                                <input id="clinicianPinCode" type="checkbox">
+                                <label for="clinicianPinCode" class="vsm-label blue">&nbsp;Clinical Authentication:</label>
+                            </div>
+                            <input id="clinicianPinCodeValueInput" type="text" class="form-control" formControlName="clinicianPinCodeValue">
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="vsm-scheduler-border">
+                        <legend>Alarm Settings</legend>
+
+                        <div class="form-group">
+                            <div class="vsm-checkbox">
+                                <input id="arrhythmiaAlarmsEnabled" type="checkbox" formControlName="arrhythmiaAlarmsEnabled">
+                                <label for="arrhythmiaAlarmsEnabled" class="vsm-label blue">&nbsp;Arrhythmia Alarms Enabled</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="vsm-checkbox">
+                                <input id="postureAlarmsEnabled" type="checkbox" formControlName="postureAlarmsEnabled">
+                                <label for="postureAlarmsEnabled" class="vsm-label blue">&nbsp;Posture Alarms Enabled</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
             </div>
+
+            <button type="button" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-primary">Publish</button>
+            <button type="button" class="btn btn-primary">PDF</button>
+            <button type="button" class="btn btn-primary">Export</button>
         </form>
     </div>
 </div>
