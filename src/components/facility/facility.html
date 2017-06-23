@@ -4,7 +4,7 @@
         <!--<p>Form value: {{ facilityForm.value | json }}</p>
         <p>Form status: {{ facilityForm.status | json }}</p>-->
 
-        <form [formGroup]="facilityForm">
+        <form [formGroup]="facilityForm" *ngIf="pageLoadingComplete">
             <h3 class="card-title">Facility Configuration</h3>
 
             <div class="row">
