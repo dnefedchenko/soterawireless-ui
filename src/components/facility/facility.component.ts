@@ -38,22 +38,22 @@ export class FacilityComponent implements OnInit {
     private initFacilityForm(): void {
         this.facilityForm = this.formBuilder.group({
             name: [this.facility.name, Validators.required],
-            adtEnabled: false,
-            nonAdtRequiredFieldLabel: '',
-            temperatureDisplay: '',
-            temperatureUnitsOfMeasure: '',
-            respirationDisplay: '',
-            bloodPressureUnitsOfMeasure: '',
-            dateFormat: '',
-            timeFormat: '',
-            rvdAdminPinCodeValue: '',
-            accessTimeout: '',
-            filterFrequency: '',
-            screenTimeout: '',
-            customDelay: '',
-            clinicianPinCodeValue: '',
-            arrhythmiaAlarmsEnabled: '',
-            postureAlarmsEnabled: ''
+            adtEnabled: [this.facility.adtEnabled],
+            nonAdtRequiredFieldLabel: [this.facility.nonAdtRequiredFieldLabel],
+            temperatureDisplay: [this.facility.temperatureDisplay],
+            temperatureUnitsOfMeasure: [this.facility.temperatureUnitsOfMeasure],
+            respirationDisplay: [this.facility.respirationDisplay],
+            bloodPressureUnitsOfMeasure: [this.facility.bloodPressureUnitsOfMeasure],
+            dateFormat: [this.facility.dateFormat],
+            timeFormat: [this.facility.timeFormat],
+            rvdAdminPinCodeValue: [this.facility.rvdAdminPinCodeValue],
+            accessTimeout: [this.facility.accessTimeout],
+            filterFrequency: [this.facility.filterFrequency],
+            screenTimeout: [this.facility.screenTimeout],
+            customDelay: [this.facility.customDelay],
+            clinicianPinCodeValue: [this.facility.clinicianPinCodeValue],
+            arrhythmiaAlarmsEnabled: [this.facility.arrhythmiaAlarmsEnabled],
+            postureAlarmsEnabled: [this.facility.postureAlarmsEnabled]
         });
     }
 }
