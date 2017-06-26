@@ -4,7 +4,7 @@
         <p *ngIf="pageLoadingComplete">Form value: {{ facilityForm.value | json }}</p>
         <p *ngIf="pageLoadingComplete">Form status: {{ facilityForm.status | json }}</p>
 
-        <form [formGroup]="facilityForm" *ngIf="pageLoadingComplete" (ngSubmit)="onUpdate()">
+        <form [formGroup]="facilityForm" *ngIf="pageLoadingComplete" (ngSubmit)="onSubmit()">
             <h3 class="card-title">Facility Configuration</h3>
 
             <div class="row">
@@ -148,7 +148,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid">Update</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid" *ngIf="facilityExists()">Update</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid" *ngIf="!facilityExists()">Create</button>
             <button type="button" class="btn btn-primary">Publish</button>
             <button type="button" class="btn btn-primary">PDF</button>
             <button type="button" class="btn btn-primary">Export</button>

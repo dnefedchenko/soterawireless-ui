@@ -16,6 +16,9 @@ function pinValidator(control: FormControl): {[s: string]: boolean} {
 export class FacilityComponent implements OnInit {
     DEFAULT_PIN_CODE_VALUE: string = '0000';
 
+    NOT_FOUND_STATUS: number = 404;
+    UNAUTHORIZED_STATUS: number = 401;
+
     pageLoadingComplete: boolean = false;
 
     temperatureUnitOptions: Array<any>;
@@ -102,7 +105,16 @@ export class FacilityComponent implements OnInit {
                     this.pageLoadingComplete = true;
                 },
                 (error: any) => {
-                    console.log('Failed to get main facility unit');
+                    if (error.status === this.NOT_FOUND_STATUS) {
+                        this.initDefaultFacilityForm();
+
+                        this.pageLoadingComplete = true;
+                    } else {
+                        if (error.status !== this.UNAUTHORIZED_STATUS) {
+                            // NotificationService.showErrorNotification('Failed to load facility configuration.');
+                        }
+                        // $location.path('/error-page');
+                    }
                 });
     }
 
@@ -129,6 +141,32 @@ export class FacilityComponent implements OnInit {
         });
     }
 
+    private initDefaultFacilityForm(): void {
+        this.facilityForm = this.formBuilder.group({
+            name: ['Sotera Medical', Validators.required],
+            adtEnabled: false,
+            nonAdtRequiredFieldLabel: 'MRN',
+            temperatureDisplay: true,
+            temperatureUnitsOfMeasure: this.temperatureUnitOptions[1].name,
+            respirationDisplay: true,
+            bloodPressureUnitsOfMeasure: this.bloodPressureUnitOptions[0].name,
+            dateFormat: this.dateFormatOptions[0].name,
+            timeFormat: this.timeFormatOptions[1].name,
+            rvdAdminPinCodeValue: ['0000', Validators.compose([pinValidator])],
+            accessTimeout: this.accessTimeoutOptions[9].name,
+            filterFrequency: this.noiseFrequencyOptions[1].name,
+            screenTimeout: this.screenTimeoutOptions[4].name,
+            customDelay: this.customDelayOptions[0].name,
+            clinicianPinCodeValue: '',
+            arrhythmiaAlarmsEnabled: false,
+            postureAlarmsEnabled: false
+        });
+    }
+
+    facilityExists(): boolean {
+        return this.facility && this.facility.id !== null && this.facility.id !== undefined;
+    }
+
     watchAdt(): void {
         this.facilityForm.get('adtEnabled').valueChanges.subscribe(newValue => {
             let adtInput = this.facilityForm.get('nonAdtRequiredFieldLabel');
@@ -144,8 +182,17 @@ export class FacilityComponent implements OnInit {
         }
     }
 
-    onUpdate(): void {
-        console.log(this.facilityForm.value);
+    onSubmit(): void {
+        this.prepareBeforeSubmit();
+
+        if (this.facilityExists()) {
+            this.updateFacility();
+        } else {
+            this.createFacility();
+        }
+    }
+
+    private updateFacility() {
         this.apiService
             .put('/facility-units', this.facilityForm.value)
             .subscribe(
@@ -155,5 +202,22 @@ export class FacilityComponent implements OnInit {
                 (error: any) => {
                     console.log('Failed to update facility');
                 });
+    }
+
+    private createFacility() {
+        this.apiService
+            .post('/facility-units', this.facilityForm.value)
+            .subscribe(
+                (response: Response) => {
+                    console.log('Facility has been successfully created');
+                },
+                (error: any) => {
+                    console.log('Failed to create new facility');
+                });
+    }
+
+    private prepareBeforeSubmit() {
+        this.facilityForm.get('temperatureDisplay').setValue(this.facilityForm.get('temperatureDisplay').value ? 'On' : 'Off');
+        this.facilityForm.get('respirationDisplay').setValue(this.facilityForm.get('respirationDisplay').value ? 'On' : 'Off');
     }
 }
