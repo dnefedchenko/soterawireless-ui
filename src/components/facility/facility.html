@@ -1,8 +1,8 @@
 <div class="card">
     <div class="card-block">
 
-        <!--<p>Form value: {{ facilityForm.value | json }}</p>
-        <p>Form status: {{ facilityForm.status | json }}</p>-->
+        <!--<p *ngIf="pageLoadingComplete">Form value: {{ facilityForm.value | json }}</p>
+        <p *ngIf="pageLoadingComplete">Form status: {{ facilityForm.status | json }}</p>-->
 
         <form [formGroup]="facilityForm" *ngIf="pageLoadingComplete">
             <h3 class="card-title">Facility Configuration</h3>
@@ -37,8 +37,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="temperatureUnitsOfMeasureInput" class="vsm-label">Temperature Units Of Measure:</label>
-                            <input id="temperatureUnitsOfMeasureInput" type="text" class="form-control" formControlName="temperatureUnitsOfMeasure">
+                            <label for="temperatureUnitsOfMeasureSelect" class="vsm-label">Temperature Units Of Measure:</label>
+                            <select id="temperatureUnitsOfMeasureSelect" class="form-control" formControlName="temperatureUnitsOfMeasure">
+                                <option *ngFor="let option of temperatureUnitOptions" [ngValue]="option.name">{{option.name}}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -49,18 +51,24 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="bloodPressureUnitsOfMeasureInput" class="vsm-label">Blood Pressure Units Of Measure:</label>
-                            <input id="bloodPressureUnitsOfMeasureInput" type="text" class="form-control" formControlName="bloodPressureUnitsOfMeasure">
+                            <label for="bloodPressureUnitsOfMeasureSelect" class="vsm-label">Blood Pressure Units Of Measure:</label>
+                            <select id="bloodPressureUnitsOfMeasureSelect" class="form-control" formControlName="bloodPressureUnitsOfMeasure">
+                                <option *ngFor="let option of bloodPressureUnitOptions" [ngValue]="option.name">{{option.name}}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="dateFormatInput" class="vsm-label">Date Format:</label>
-                            <input id="dateFormatInput" type="text" class="form-control" formControlName="dateFormat">
+                            <label for="dateFormatSelect" class="vsm-label">Date Format:</label>
+                            <select id="dateFormatSelect" class="form-control" formControlName="dateFormat">
+                                <option *ngFor="let option of dateFormatOptions" [ngValue]="option.name">{{option.alias}}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="timeFormatInput" class="vsm-label">Time Format:</label>
-                            <input id="timeFormatInput" type="text" class="form-control" formControlName="timeFormat">
+                            <label for="timeFormatSelect" class="vsm-label">Time Format:</label>
+                            <select id="timeFormatSelect" class="form-control" formControlName="timeFormat">
+                                <option *ngFor="let option of timeFormatOptions" [ngValue]="option.name">{{option.alias}}</option>
+                            </select>
                         </div>
                     </fieldset>
                 </div>
@@ -75,8 +83,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="accessTimeoutInput" class="vsm-label">Access Timeout:</label>
-                            <input id="accessTimeoutInput" type="text" class="form-control" formControlName="accessTimeout">
+                            <label for="accessTimeoutSelect" class="vsm-label">Access Timeout:</label>
+                            <select id="accessTimeoutSelect" class="form-control" formControlName="accessTimeout">
+                                <option *ngFor="let option of accessTimeoutOptions" [ngValue]="option.name">{{option.alias}}</option>
+                            </select>
                         </div>
                     </fieldset>
 
@@ -84,18 +94,24 @@
                         <legend>ViSi Monitor Settings</legend>
 
                         <div class="form-group">
-                            <label for="filterFrequencyInput" class="vsm-label">ECG Line Noise Filter:</label>
-                            <input id="filterFrequencyInput" type="text" class="form-control" formControlName="filterFrequency">
+                            <label for="filterFrequencySelect" class="vsm-label">ECG Line Noise Filter:</label>
+                            <select id="filterFrequencySelect" class="form-control" formControlName="filterFrequency">
+                                <option *ngFor="let option of noiseFrequencyOptions" [ngValue]="option.name">{{option.alias}}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="screenTimeoutInput" class="vsm-label">Screen Timeout:</label>
-                            <input id="screenTimeoutInput" type="text" class="form-control" formControlName="screenTimeout">
+                            <label for="screenTimeoutSelect" class="vsm-label">Screen Timeout:</label>
+                            <select id="screenTimeoutSelect" class="form-control" formControlName="screenTimeout">
+                                <option *ngFor="let option of screenTimeoutOptions" [ngValue]="option.name">{{option.alias}}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="customDelayInput" class="vsm-label">Custom Delay:</label>
-                            <input id="customDelayInput" type="text" class="form-control" formControlName="customDelay">
+                            <label for="customDelaySelect" class="vsm-label">Custom Delay:</label>
+                            <select id="customDelaySelect" class="form-control" formControlName="customDelay">
+                                <option *ngFor="let option of customDelayOptions" [ngValue]="option.name">{{option.alias}}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
