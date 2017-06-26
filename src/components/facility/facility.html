@@ -1,10 +1,10 @@
 <div class="card">
     <div class="card-block">
 
-        <!--<p *ngIf="pageLoadingComplete">Form value: {{ facilityForm.value | json }}</p>
-        <p *ngIf="pageLoadingComplete">Form status: {{ facilityForm.status | json }}</p>-->
+        <p *ngIf="pageLoadingComplete">Form value: {{ facilityForm.value | json }}</p>
+        <p *ngIf="pageLoadingComplete">Form status: {{ facilityForm.status | json }}</p>
 
-        <form [formGroup]="facilityForm" *ngIf="pageLoadingComplete">
+        <form [formGroup]="facilityForm" *ngIf="pageLoadingComplete" (ngSubmit)="onUpdate()">
             <h3 class="card-title">Facility Configuration</h3>
 
             <div class="row">
@@ -116,7 +116,7 @@
 
                         <div class="form-group">
                             <div class="vsm-checkbox">
-                                <input id="clinicianPinCode" type="checkbox">
+                                <input id="clinicianPinCode" type="checkbox" #clinicianControl (change)="toggleClinicianInput(clinicianControl.checked)">
                                 <label for="clinicianPinCode" class="vsm-label blue">&nbsp;Clinical Authentication:</label>
                             </div>
                             <input id="clinicianPinCodeValueInput" type="text" class="form-control" formControlName="clinicianPinCodeValue">
@@ -143,7 +143,7 @@
                 </div>
             </div>
 
-            <button type="button" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Update</button>
             <button type="button" class="btn btn-primary">Publish</button>
             <button type="button" class="btn btn-primary">PDF</button>
             <button type="button" class="btn btn-primary">Export</button>

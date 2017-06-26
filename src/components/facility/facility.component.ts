@@ -8,6 +8,8 @@ import {Response} from "@angular/http";
     templateUrl: './facility.html'
 })
 export class FacilityComponent implements OnInit {
+    DEFAULT_PIN_CODE_VALUE: string = '0000';
+
     pageLoadingComplete: boolean = false;
 
     temperatureUnitOptions: Array<any>;
@@ -89,6 +91,8 @@ export class FacilityComponent implements OnInit {
                     this.facility = response.json();
                     this.initFacilityForm();
 
+                    this.watchAdt();
+
                     this.pageLoadingComplete = true;
                 },
                 (error: any) => {
@@ -100,7 +104,7 @@ export class FacilityComponent implements OnInit {
         this.facilityForm = this.formBuilder.group({
             name: [this.facility.name, Validators.required],
             adtEnabled: [this.facility.adtEnabled],
-            nonAdtRequiredFieldLabel: [this.facility.nonAdtRequiredFieldLabel],
+            nonAdtRequiredFieldLabel: [{value: this.facility.nonAdtRequiredFieldLabel, disabled: this.facility.adtEnabled}],
             temperatureDisplay: [this.facility.temperatureDisplay],
             temperatureUnitsOfMeasure: [this.facility.temperatureUnitsOfMeasure],
             respirationDisplay: [this.facility.respirationDisplay],
@@ -112,9 +116,28 @@ export class FacilityComponent implements OnInit {
             filterFrequency: [this.facility.filterFrequency],
             screenTimeout: [this.facility.screenTimeout],
             customDelay: [this.facility.customDelay],
-            clinicianPinCodeValue: [this.facility.clinicianPinCodeValue],
+            clinicianPinCodeValue: [{value: this.facility.clinicianPinCodeValue, disabled: this.facility.clinicianPinCodeValue === null}],
             arrhythmiaAlarmsEnabled: [this.facility.arrhythmiaAlarmsEnabled],
             postureAlarmsEnabled: [this.facility.postureAlarmsEnabled]
         });
+    }
+
+    watchAdt(): void {
+        this.facilityForm.get('adtEnabled').valueChanges.subscribe(newValue => {
+            let adtInput = this.facilityForm.get('nonAdtRequiredFieldLabel');
+            newValue ? adtInput.disable() : adtInput.enable();
+        });
+    }
+
+    toggleClinicianInput(checked: boolean): void {
+        let pinCodeControl = this.facilityForm.get('clinicianPinCodeValue');
+        checked ? pinCodeControl.enable() : pinCodeControl.disable();
+        if (pinCodeControl.value === null) {
+            pinCodeControl.setValue(this.DEFAULT_PIN_CODE_VALUE);
+        }
+    }
+
+    onUpdate(): void {
+        console.log(this.facilityForm.value);
     }
 }
