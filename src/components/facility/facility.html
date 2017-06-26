@@ -14,7 +14,9 @@
 
                         <div class="form-group">
                             <label for="facilityNameInput" class="vsm-label">Facility Name:</label>
-                            <input id="facilityNameInput" type="text" class="form-control" formControlName="name">
+                            <input id="facilityNameInput" type="text" class="form-control" formControlName="name"
+                                   [ngStyle]="{'border-color': facilityForm.controls['name'].hasError('required') ? 'red': ''}">
+                            <span class="error-message" *ngIf="facilityForm.controls['name'].hasError('required')">Required field</span>
                         </div>
 
                         <div class="form-group">
@@ -79,7 +81,10 @@
 
                         <div class="form-group">
                             <label for="rvdAdminPinCodeInput" class="vsm-label">Admin Pin Code:</label>
-                            <input id="rvdAdminPinCodeInput" type="text" class="form-control" formControlName="rvdAdminPinCodeValue">
+                            <input id="rvdAdminPinCodeInput" type="text" class="form-control" formControlName="rvdAdminPinCodeValue"
+                                   [ngStyle]="{'border-color': facilityForm.controls['rvdAdminPinCodeValue'].hasError('pinCodeMismatch') ? 'red' : ''}">
+                            <span class="error-message" *ngIf="facilityForm.controls['rvdAdminPinCodeValue'].hasError('pinCodeMismatch')">
+                                Field should be a number of 4 to 8 digits</span>
                         </div>
 
                         <div class="form-group">
@@ -143,7 +148,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid">Update</button>
             <button type="button" class="btn btn-primary">Publish</button>
             <button type="button" class="btn btn-primary">PDF</button>
             <button type="button" class="btn btn-primary">Export</button>

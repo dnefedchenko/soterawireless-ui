@@ -156,6 +156,21 @@
     content: "\e920";
 }
 
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: block;
+}
+
+.invalid-input {
+    border-color: red;
+}
+
+.bordered {
+    border: 1px dashed black;
+    background-color: #eee;
+}
+
 #sidebar {
     position: fixed;
     bottom: 0;

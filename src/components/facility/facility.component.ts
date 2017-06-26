@@ -1,7 +1,13 @@
 import {Component, OnInit} from "@angular/core";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {ApiService} from "../../services/api.service";
 import {Response} from "@angular/http";
+
+function pinValidator(control: FormControl): {[s: string]: boolean} {
+    if (control && !control.value.match(/^\d{4,8}$/)) {
+        return {'pinCodeMismatch': true}
+    }
+}
 
 @Component({
     selector: 'facility',
@@ -111,7 +117,7 @@ export class FacilityComponent implements OnInit {
             bloodPressureUnitsOfMeasure: [this.facility.bloodPressureUnitsOfMeasure],
             dateFormat: [this.facility.dateFormat],
             timeFormat: [this.facility.timeFormat],
-            rvdAdminPinCodeValue: [this.facility.rvdAdminPinCodeValue],
+            rvdAdminPinCodeValue: [this.facility.rvdAdminPinCodeValue, Validators.compose([pinValidator])],
             accessTimeout: [this.facility.accessTimeout],
             filterFrequency: [this.facility.filterFrequency],
             screenTimeout: [this.facility.screenTimeout],
