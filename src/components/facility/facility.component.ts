@@ -108,6 +108,7 @@ export class FacilityComponent implements OnInit {
 
     private initFacilityForm(): void {
         this.facilityForm = this.formBuilder.group({
+            id: this.facility.id,
             name: [this.facility.name, Validators.required],
             adtEnabled: [this.facility.adtEnabled],
             nonAdtRequiredFieldLabel: [{value: this.facility.nonAdtRequiredFieldLabel, disabled: this.facility.adtEnabled}],
@@ -145,5 +146,14 @@ export class FacilityComponent implements OnInit {
 
     onUpdate(): void {
         console.log(this.facilityForm.value);
+        this.apiService
+            .put('/facility-units', this.facilityForm.value)
+            .subscribe(
+                (response: Response) => {
+                    console.log('Facility has been updated successfully');
+                },
+                (error: any) => {
+                    console.log('Failed to update facility');
+                });
     }
 }
