@@ -4,12 +4,13 @@ import {VsmAppComponent} from "./app.component";
 import {RouterModule, Routes} from "@angular/router";
 import {FacilityComponent} from "../facility/facility.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HttpModule, Http} from "@angular/http";
+import {HttpModule, Http, BrowserXhr} from "@angular/http";
 import {ApiService} from "../../services/api.service";
 import {environment} from "../../environments/environment";
 import {LoginComponent} from "../login/login.component";
 import {AuthenticationService} from "../../services/authentication.service";
 import {RouterGuard} from "../../services/router.guard";
+import {CorsService} from "../../services/cors.service";
 
 export const appRoutes: Routes = [
     {path: 'clinical-configuration', component: FacilityComponent, canActivate: [RouterGuard]},
@@ -39,6 +40,7 @@ export function authenticationServiceFactory(apiService: ApiService) {
         RouterModule.forRoot(appRoutes)
     ],
     providers: [
+        {provide: BrowserXhr, useClass: CorsService},
         {provide: 'apiUrl', useValue: environment.apiUrl},
         {
             provide: ApiService,
