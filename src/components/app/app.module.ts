@@ -11,6 +11,7 @@ import {LoginComponent} from "../login/login.component";
 import {AuthenticationService} from "../../services/authentication.service";
 import {RouterGuard} from "../../services/router.guard";
 import {CorsService} from "../../services/cors.service";
+import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 
 export const appRoutes: Routes = [
     {path: 'clinical-configuration', component: FacilityComponent, canActivate: [RouterGuard]},
@@ -52,7 +53,8 @@ export function authenticationServiceFactory(apiService: ApiService) {
             useFactory: authenticationServiceFactory,
             deps: [ApiService]
         },
-        {provide: RouterGuard, useClass: RouterGuard}
+        {provide: RouterGuard, useClass: RouterGuard},
+        {provide: LocationStrategy, useClass: HashLocationStrategy}
     ],
     bootstrap: [VsmAppComponent]
 })
