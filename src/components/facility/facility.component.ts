@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {ApiService} from "../../services/api.service";
 import {Response} from "@angular/http";
+import {NotificationService} from "../../services/notification.service";
 
 function pinValidator(control: FormControl): {[s: string]: boolean} {
     if (control && !control.value.match(/^\d{4,8}$/)) {
@@ -33,7 +34,7 @@ export class FacilityComponent implements OnInit {
     facility: any;
     facilityForm: FormGroup;
 
-    constructor(private apiService: ApiService, private formBuilder: FormBuilder) {
+    constructor(private apiService: ApiService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
         this.temperatureUnitOptions = [
             {name: 'Celsius'},
             {name: 'Fahrenheit'}
@@ -111,9 +112,8 @@ export class FacilityComponent implements OnInit {
                         this.pageLoadingComplete = true;
                     } else {
                         if (error.status !== this.UNAUTHORIZED_STATUS) {
-                            // NotificationService.showErrorNotification('Failed to load facility configuration.');
+                            this.notificationService.showErrorNotification("Failed to load facility configuration", "Error");
                         }
-                        // $location.path('/error-page');
                     }
                 });
     }
@@ -197,10 +197,10 @@ export class FacilityComponent implements OnInit {
             .put('/facility-units', this.facilityForm.value)
             .subscribe(
                 (response: Response) => {
-                    console.log('Facility has been updated successfully');
+                    this.notificationService.showSuccessNotification(this.facilityForm.get("name").value.concat(" has been updated successfully"), "Success");
                 },
                 (error: any) => {
-                    console.log('Failed to update facility');
+                    this.notificationService.showErrorNotification("Failed to update facility", "Error");
                 });
     }
 
@@ -209,10 +209,10 @@ export class FacilityComponent implements OnInit {
             .post('/facility-units', this.facilityForm.value)
             .subscribe(
                 (response: Response) => {
-                    console.log('Facility has been successfully created');
+                    this.notificationService.showSuccessNotification(this.facilityForm.get("name").value.concat(" has been successfully created"), "Success");
                 },
                 (error: any) => {
-                    console.log('Failed to create new facility');
+                    this.notificationService.showErrorNotification("Failed to create new facility", "Error");
                 });
     }
 

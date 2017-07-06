@@ -3,6 +3,7 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {Response} from "@angular/http";
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../services/authentication.service";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
     selector: 'login',
@@ -51,7 +52,9 @@ export class LoginComponent implements OnInit {
 
     loginForm: FormGroup;
 
-    constructor(private authenticationService: AuthenticationService, private formBuilder: FormBuilder, private router: Router) {
+    constructor(private authenticationService: AuthenticationService,
+                private notificationService: NotificationService,
+                private formBuilder: FormBuilder, private router: Router) {
 
     }
 
@@ -74,6 +77,7 @@ export class LoginComponent implements OnInit {
                         this.router.navigateByUrl('/clinical-configuration');
                         this.authenticationFailed = false;
                         this.sessionExpired = false;
+                        this.notificationService.showSuccessNotification("You're logged in as ".concat(response.json().username), "Welcome!")
                     } else {
                         this.handleError();
                     }
@@ -88,7 +92,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('login');
         this.authenticationFailed = true;
         this.sessionExpired = true;
-        // NotificationService.showErrorNotification('Authentication failure.');
+        this.notificationService.showErrorNotification("Authentication failure", "Failure");
     }
 
     isAuthenticated(): boolean {

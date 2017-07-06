@@ -1,7 +1,9 @@
-import {Component, ElementRef, Renderer2, AfterContentChecked} from "@angular/core";
+import {Component, ElementRef, Renderer2, AfterContentChecked, ViewContainerRef} from "@angular/core";
 import {AuthenticationService} from "../../services/authentication.service";
 import {Response} from "@angular/http";
 import {Router} from "@angular/router";
+import {ToastsManager} from "ng2-toastr";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
     selector: '[vsm]',
@@ -11,8 +13,14 @@ import {Router} from "@angular/router";
 export class VsmAppComponent implements AfterContentChecked {
     backgroundCss: string = 'login-background';
 
-    constructor(private renderer: Renderer2, private elementRef: ElementRef, private authenticationService: AuthenticationService, private router: Router) {
-
+    constructor(private renderer: Renderer2,
+                private elementRef: ElementRef,
+                private authenticationService: AuthenticationService,
+                private notificationService: NotificationService,
+                private router: Router,
+                public toastr: ToastsManager,
+                viewContainerRef: ViewContainerRef) {
+        this.toastr.setRootViewContainerRef(viewContainerRef);
     }
 
     ngAfterContentChecked(): void {
@@ -36,7 +44,7 @@ export class VsmAppComponent implements AfterContentChecked {
                     this.router.navigateByUrl('/login');
                 },
                 (error: any) => {
-                    console.log('Failed to log out user');
+                    this.notificationService.showErrorNotification("Failed to log out from application", "Failure");
                 }
             );
     }

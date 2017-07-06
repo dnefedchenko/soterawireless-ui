@@ -12,6 +12,11 @@ import {AuthenticationService} from "../../services/authentication.service";
 import {RouterGuard} from "../../services/router.guard";
 import {CorsService} from "../../services/cors.service";
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
+import {ToastModule, ToastOptions, ToastsManager} from "ng2-toastr/ng2-toastr";
+import {VsmGlobalTostOptions} from "../../common/toast.options";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {NotificationService} from "../../services/notification.service";
+
 
 export const appRoutes: Routes = [
     {path: 'clinical-configuration', component: FacilityComponent, canActivate: [RouterGuard]},
@@ -27,6 +32,10 @@ export function authenticationServiceFactory(apiService: ApiService) {
     return new AuthenticationService(apiService);
 }
 
+export function notificationFactory(toastsManager: ToastsManager) {
+    return new NotificationService(toastsManager);
+}
+
 @NgModule({
     declarations: [
         VsmAppComponent,
@@ -35,13 +44,16 @@ export function authenticationServiceFactory(apiService: ApiService) {
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         HttpModule,
         ReactiveFormsModule,
-        RouterModule.forRoot(appRoutes)
+        RouterModule.forRoot(appRoutes),
+        ToastModule.forRoot()
     ],
     providers: [
         {provide: BrowserXhr, useClass: CorsService},
+        {provide: ToastOptions, useClass: VsmGlobalTostOptions},
         {provide: 'apiUrl', useValue: environment.apiUrl},
         {
             provide: ApiService,
@@ -52,6 +64,11 @@ export function authenticationServiceFactory(apiService: ApiService) {
             provide: AuthenticationService,
             useFactory: authenticationServiceFactory,
             deps: [ApiService]
+        },
+        {
+            provide: NotificationService,
+            useFactory: notificationFactory,
+            deps: [ToastsManager]
         },
         {provide: RouterGuard, useClass: RouterGuard},
         {provide: LocationStrategy, useClass: HashLocationStrategy}
