@@ -3,6 +3,7 @@ import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {ApiService} from "../../services/api.service";
 import {Response} from "@angular/http";
 import {NotificationService} from "../../services/notification.service";
+import {FileUploader} from "ng2-file-upload/index";
 
 function pinValidator(control: FormControl): {[s: string]: boolean} {
     if (control && !control.value.match(/^\d{4,8}$/)) {
@@ -33,6 +34,11 @@ export class ClinicalConfigurationComponent implements OnInit {
 
     facility: any;
     facilityForm: FormGroup;
+
+    locationsUploader: FileUploader;
+    configurationUploader: FileUploader;
+
+    hasBaseDropZoneOver:boolean = false;
 
     constructor(private apiService: ApiService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
         this.temperatureUnitOptions = [
@@ -87,6 +93,9 @@ export class ClinicalConfigurationComponent implements OnInit {
             {name: '0', alias: 'Default',},
             {name: '1', alias: 'Wake Forest'}
         ];
+
+        this.locationsUploader = new FileUploader({url: ''});
+        this.configurationUploader = new FileUploader({url: ''});
     }
 
     ngOnInit(): void {
@@ -219,5 +228,9 @@ export class ClinicalConfigurationComponent implements OnInit {
     private prepareBeforeSubmit() {
         this.facilityForm.get('temperatureDisplay').setValue(this.facilityForm.get('temperatureDisplay').value ? 'On' : 'Off');
         this.facilityForm.get('respirationDisplay').setValue(this.facilityForm.get('respirationDisplay').value ? 'On' : 'Off');
+    }
+
+    public fileOverBase(e:any):void {
+        this.hasBaseDropZoneOver = e;
     }
 }

@@ -148,13 +148,27 @@
                 </div>
             </div>
 
-            <location-import></location-import>
-
             <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid" *ngIf="facilityExists()">Update</button>
             <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid" *ngIf="!facilityExists()">Create</button>
             <button type="button" class="btn btn-primary">Publish</button>
             <button type="button" class="btn btn-primary">PDF</button>
             <button type="button" class="btn btn-primary">Export</button>
         </form>
+
+        <div class="row">
+            <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px'}">
+                <legend>Location Import</legend>
+
+                <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                    (fileOver)="fileOverBase($event)"
+                    [uploader]="locationsUploader"
+                    class="vsm-drop-zone">
+                    Drop location.csv here
+                </div>
+
+                <h3>Upload queue</h3>
+                <p>Queue length: {{ locationsUploader?.queue?.length }}</p>
+            </fieldset>
+        </div>
     </div>
 </div>

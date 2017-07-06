@@ -16,7 +16,7 @@ import {ToastModule, ToastOptions, ToastsManager} from "ng2-toastr/ng2-toastr";
 import {VsmGlobalTostOptions} from "../../common/toast.options";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NotificationService} from "../../services/notification.service";
-import {LocationImportComponent} from "../upload/upload.component";
+import {FileUploadModule} from "ng2-file-upload/index";
 
 
 export const appRoutes: Routes = [
@@ -41,8 +41,7 @@ export function notificationFactory(toastsManager: ToastsManager) {
     declarations: [
         VsmAppComponent,
         LoginComponent,
-        ClinicalConfigurationComponent,
-        LocationImportComponent
+        ClinicalConfigurationComponent
     ],
     imports: [
         BrowserModule,
@@ -51,7 +50,8 @@ export function notificationFactory(toastsManager: ToastsManager) {
         HttpModule,
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
-        ToastModule.forRoot()
+        ToastModule.forRoot(),
+        FileUploadModule
     ],
     providers: [
         {provide: BrowserXhr, useClass: CorsService},
