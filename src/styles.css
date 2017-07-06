@@ -179,6 +179,66 @@
     background-color: #2D3745
 }
 
+.vsm-credential-icon,
+.vsm-configuration-icon,
+.vsm-logout-icon {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    margin: 4px 0 0 4px;
+    z-index: 10;
+}
+
+.vsm-login-icon {
+    background: url(assets/images/sprites.png) no-repeat -114px -100px;
+}
+
+.vsm-password-icon {
+    background: url(assets/images/sprites.png) no-repeat -61px -100px;
+}
+
+.vsm-configuration-icon,
+.vsm-logout-icon{
+    position: relative;
+    display: inline-block;
+    /*background: url(../images/sprites.png) no-repeat -62px -1px;*/
+    margin: 0 5px 0 0;
+}
+
+.vsm-configuration-icon {
+    background: url(assets/images/sprites.png) no-repeat -62px -1px;
+}
+
+.vsm-logout-icon {
+    background: url(assets/images/sprites.png) no-repeat -261px -3px;;
+}
+
+.vsm-icon-text {
+    position: absolute;
+    color: #faaa3C;
+}
+
+.vsm-logo-wrapper {
+    overflow: auto;
+}
+
+.vsm-logo {
+    width: 245px;
+    height: 100px;
+    margin: 0 auto;
+    background: url(assets/images/sprites.png) no-repeat -245px -52px;
+}
+
+.vsm-logo-small {
+    position: absolute;
+    top: 15px;
+    left: 60px;
+    width: 122px;
+    height: 50px;
+    margin: 0 auto;
+    background: url(assets/images/sprites.png) no-repeat -482px 0;
+}
+
 .form-signin {
     max-width: 330px;
     padding: 15px;
@@ -227,6 +287,19 @@
     border-color: red;
 }
 
+/* Sidebar navigation */
+.nav-sidebar {
+    margin: 30px -21px 20px -20px;
+}
+
+.nav-link:hover {
+    background-color: #eee;
+}
+
+.nav-link.active {
+    background-color: black;
+}
+
 #sidebar {
     position: fixed;
     bottom: 0;
@@ -234,13 +307,10 @@
     background-color: #2d3745;
 }
 
-#sidebar a {
-    color: #faaa3C;
-}
-
 #sidebar ul,
 .vsm-content {
-    padding: 15px 0 0 15px;
+    padding: 15px 0 0 0;
+    margin-right: -13px;
 }
 
 fieldset.vsm-scheduler-border {

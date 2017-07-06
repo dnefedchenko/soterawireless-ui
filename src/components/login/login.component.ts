@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
                         this.router.navigateByUrl('/clinical-configuration');
                         this.authenticationFailed = false;
                         this.sessionExpired = false;
-                        this.notificationService.showSuccessNotification("You're logged in as ".concat(response.json().username), "Welcome!")
+                        this.notificationService.showInfoNotification("You're logged in as ".concat(response.json().username), "Welcome!")
                     } else {
                         this.handleError();
                     }

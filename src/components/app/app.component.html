@@ -1,12 +1,24 @@
 <div class="container-fluid">
     <div class="row">
         <div id="sidebar" class="col-md-2" *ngIf="isAuthenticated()">
-            <ul class="nav flex-column">
+            <div class="vsm-logo-wrapper">
+                <a class="navbar-brand" href="/clinical-configuration">
+                    <div class="vsm-logo-small"></div>
+                </a>
+            </div>
+
+            <ul class="nav flex-column nav-sidebar">
                 <li class="nav-item">
-                    <a class="nav-link active" routerLinkActive="active" routerLink="/clinical-configuration">Clinical Configuration</a>
+                    <a class="nav-link active" routerLinkActive="active" routerLink="/clinical-configuration">
+                        <span class="vsm-configuration-icon"></span>
+                        <span class="vsm-icon-text">Clinical Configuration</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" (click)="logout()">Logout</a>
+                    <a class="nav-link" (click)="logout()">
+                        <span class="vsm-logout-icon"></span>
+                        <span class="vsm-icon-text">Logout</span>
+                    </a>
                 </li>
             </ul>
         </div>
