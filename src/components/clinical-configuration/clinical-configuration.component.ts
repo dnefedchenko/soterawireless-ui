@@ -11,10 +11,10 @@ function pinValidator(control: FormControl): {[s: string]: boolean} {
 }
 
 @Component({
-    selector: 'facility',
-    templateUrl: './facility.html'
+    selector: 'clinical-configuration',
+    templateUrl: 'clinical-configuration.html'
 })
-export class FacilityComponent implements OnInit {
+export class ClinicalConfigurationComponent implements OnInit {
     DEFAULT_PIN_CODE_VALUE: string = '0000';
 
     NOT_FOUND_STATUS: number = 404;
@@ -95,7 +95,7 @@ export class FacilityComponent implements OnInit {
 
     private getMainFacility(): void {
         this.apiService
-            .get("/facility-units/main-facility-unit")
+            .get("/clinical-configuration-units/main-clinical-configuration-unit")
             .subscribe(
                 (response: Response) => {
                     this.facility = response.json();
@@ -112,7 +112,7 @@ export class FacilityComponent implements OnInit {
                         this.pageLoadingComplete = true;
                     } else {
                         if (error.status !== this.UNAUTHORIZED_STATUS) {
-                            this.notificationService.showErrorNotification("Failed to load facility configuration", "Error");
+                            this.notificationService.showErrorNotification("Failed to load clinical-configuration configuration", "Error");
                         }
                     }
                 });
@@ -194,25 +194,25 @@ export class FacilityComponent implements OnInit {
 
     private updateFacility() {
         this.apiService
-            .put('/facility-units', this.facilityForm.value)
+            .put('/clinical-configuration-units', this.facilityForm.value)
             .subscribe(
                 (response: Response) => {
                     this.notificationService.showSuccessNotification(this.facilityForm.get("name").value.concat(" has been updated successfully"), "Success");
                 },
                 (error: any) => {
-                    this.notificationService.showErrorNotification("Failed to update facility", "Error");
+                    this.notificationService.showErrorNotification("Failed to update clinical-configuration", "Error");
                 });
     }
 
     private createFacility() {
         this.apiService
-            .post('/facility-units', this.facilityForm.value)
+            .post('/clinical-configuration-units', this.facilityForm.value)
             .subscribe(
                 (response: Response) => {
                     this.notificationService.showSuccessNotification(this.facilityForm.get("name").value.concat(" has been successfully created"), "Success");
                 },
                 (error: any) => {
-                    this.notificationService.showErrorNotification("Failed to create new facility", "Error");
+                    this.notificationService.showErrorNotification("Failed to create new clinical-configuration", "Error");
                 });
     }
 

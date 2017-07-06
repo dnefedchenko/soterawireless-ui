@@ -2,7 +2,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {NgModule} from "@angular/core";
 import {VsmAppComponent} from "./app.component";
 import {RouterModule, Routes} from "@angular/router";
-import {FacilityComponent} from "../facility/facility.component";
+import {ClinicalConfigurationComponent} from "../clinical-configuration/clinical-configuration.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpModule, Http, BrowserXhr} from "@angular/http";
 import {ApiService} from "../../services/api.service";
@@ -19,7 +19,7 @@ import {NotificationService} from "../../services/notification.service";
 
 
 export const appRoutes: Routes = [
-    {path: 'clinical-configuration', component: FacilityComponent, canActivate: [RouterGuard]},
+    {path: 'clinical-configuration', component: ClinicalConfigurationComponent, canActivate: [RouterGuard]},
     {path: 'login', component: LoginComponent},
     {path: '', redirectTo: 'login', pathMatch: 'full'}
 ];
@@ -40,7 +40,8 @@ export function notificationFactory(toastsManager: ToastsManager) {
     declarations: [
         VsmAppComponent,
         LoginComponent,
-        FacilityComponent
+        ClinicalConfigurationComponent,
+        ClinicalConfigurationComponent
     ],
     imports: [
         BrowserModule,
