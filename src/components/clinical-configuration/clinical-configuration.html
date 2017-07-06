@@ -148,6 +148,8 @@
                 </div>
             </div>
 
+            <location-import></location-import>
+
             <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid" *ngIf="facilityExists()">Update</button>
             <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid" *ngIf="!facilityExists()">Create</button>
             <button type="button" class="btn btn-primary">Publish</button>

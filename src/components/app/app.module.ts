@@ -16,6 +16,7 @@ import {ToastModule, ToastOptions, ToastsManager} from "ng2-toastr/ng2-toastr";
 import {VsmGlobalTostOptions} from "../../common/toast.options";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NotificationService} from "../../services/notification.service";
+import {LocationImportComponent} from "../upload/upload.component";
 
 
 export const appRoutes: Routes = [
@@ -41,7 +42,7 @@ export function notificationFactory(toastsManager: ToastsManager) {
         VsmAppComponent,
         LoginComponent,
         ClinicalConfigurationComponent,
-        ClinicalConfigurationComponent
+        LocationImportComponent
     ],
     imports: [
         BrowserModule,
