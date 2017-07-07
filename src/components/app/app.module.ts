@@ -17,6 +17,8 @@ import {VsmGlobalTostOptions} from "../../common/toast.options";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NotificationService} from "../../services/notification.service";
 import {FileUploadModule} from "ng2-file-upload/index";
+import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
+
 
 
 export const appRoutes: Routes = [
@@ -46,6 +48,7 @@ export function notificationFactory(toastsManager: ToastsManager) {
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        AngularFontAwesomeModule,
         FormsModule,
         HttpModule,
         ReactiveFormsModule,

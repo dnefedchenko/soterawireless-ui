@@ -4,6 +4,7 @@ import {ApiService} from "../../services/api.service";
 import {Response} from "@angular/http";
 import {NotificationService} from "../../services/notification.service";
 import {FileUploader} from "ng2-file-upload/index";
+import {environment} from "../../environments/environment";
 
 function pinValidator(control: FormControl): {[s: string]: boolean} {
     if (control && !control.value.match(/^\d{4,8}$/)) {
@@ -38,7 +39,8 @@ export class ClinicalConfigurationComponent implements OnInit {
     locationsUploader: FileUploader;
     configurationUploader: FileUploader;
 
-    hasBaseDropZoneOver:boolean = false;
+    hasLocationDropOver: boolean = false;
+    hasConfigurationDropOver: boolean = false;
 
     constructor(private apiService: ApiService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
         this.temperatureUnitOptions = [
@@ -94,8 +96,8 @@ export class ClinicalConfigurationComponent implements OnInit {
             {name: '1', alias: 'Wake Forest'}
         ];
 
-        this.locationsUploader = new FileUploader({url: ''});
-        this.configurationUploader = new FileUploader({url: ''});
+        this.locationsUploader = new FileUploader({url: environment.apiUrl.concat('/upload-locations')});
+        this.configurationUploader = new FileUploader({url: environment.apiUrl.concat('/upload-configuration')});
     }
 
     ngOnInit(): void {
@@ -230,7 +232,19 @@ export class ClinicalConfigurationComponent implements OnInit {
         this.facilityForm.get('respirationDisplay').setValue(this.facilityForm.get('respirationDisplay').value ? 'On' : 'Off');
     }
 
-    public fileOverBase(e:any):void {
-        this.hasBaseDropZoneOver = e;
+    public locationDropOver(e:any):void {
+        this.hasLocationDropOver = e;
+    }
+
+    public configurationDropOver(e:any):void {
+        this.hasConfigurationDropOver = e;
+    }
+
+    public locationsCsvFileSelected(): boolean {
+        return this.locationsUploader.queue.length > 0;
+    }
+
+    public configurationJsonSelected(): boolean {
+        return this.configurationUploader.queue.length > 0;
     }
 }

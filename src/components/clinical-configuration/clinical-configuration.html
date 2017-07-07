@@ -155,19 +155,103 @@
             <button type="button" class="btn btn-primary">Export</button>
         </form>
 
-        <div class="row">
+        <div class="row" [ngStyle]="{'margin-top': '10px'}">
             <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px'}">
                 <legend>Location Import</legend>
 
-                <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-                    (fileOver)="fileOverBase($event)"
+                <div ng2FileDrop [ngClass]="{'nv-file-over': hasLocationDropOver}"
+                    (fileOver)="locationDropOver($event)"
                     [uploader]="locationsUploader"
                     class="vsm-drop-zone">
                     Drop location.csv here
                 </div>
 
-                <h3>Upload queue</h3>
-                <p>Queue length: {{ locationsUploader?.queue?.length }}</p>
+                <div *ngIf="locationsCsvFileSelected()">
+                    Upload progress:
+                    <div class="progress" style="">
+                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': locationsUploader.progress + '%' }"></div>
+                    </div>
+                </div>
+
+                <table class="table" *ngIf="locationsCsvFileSelected()">
+                    <thead>
+                        <tr>
+                            <th width="50%">Name</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let uploadItem of locationsUploader.queue">
+                            <td>
+                                <strong>{{uploadItem?.file?.name}}</strong>
+                            </td>
+                            <td>
+                                <span *ngIf="uploadItem.isSuccess"><i class="fa fa-check" aria-hidden="true"></i></span>
+                                <span *ngIf="uploadItem.isError"><i class="fa fa-times" aria-hidden="true"></i></span>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-primary btn-xs"
+                                        (click)="uploadItem.upload()" [disabled]="uploadItem.isReady || uploadItem.isUploading || uploadItem.isSuccess">
+                                    <span class="glyphicon glyphicon-upload"></span> Upload
+                                </button>
+                                <button type="button" class="btn btn-warning btn-xs" (click)="uploadItem.remove()">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+
+        <div class="row" [ngStyle]="{'margin-top': '10px'}">
+            <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px'}">
+                <legend>Configuration Upload</legend>
+
+                <div ng2FileDrop [ngClass]="{'nv-file-over': hasConfigurationDropOver}"
+                     (fileOver)="configurationDropOver($event)"
+                     [uploader]="configurationUploader"
+                     class="vsm-drop-zone">
+                    Drop configuration.json here
+                </div>
+
+                <div *ngIf="configurationJsonSelected()">
+                    Upload progress:
+                    <div class="progress" style="">
+                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': locationsUploader.progress + '%' }"></div>
+                    </div>
+                </div>
+
+                <table class="table" *ngIf="configurationJsonSelected()">
+                    <thead>
+                    <tr>
+                        <th width="50%">Name</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let uploadItem of configurationUploader.queue">
+                        <td>
+                            <strong>{{uploadItem?.file?.name}}</strong>
+                        </td>
+                        <td>
+                            <span *ngIf="uploadItem.isSuccess"><i class="fa fa-check" aria-hidden="true"></i></span>
+                            <span *ngIf="uploadItem.isError"><i class="fa fa-times" aria-hidden="true"></i></span>
+                        </td>
+                        <td nowrap>
+                            <button type="button" class="btn btn-primary btn-xs"
+                                    (click)="uploadItem.upload()" [disabled]="uploadItem.isReady || uploadItem.isUploading || uploadItem.isSuccess">
+                                <span class="glyphicon glyphicon-upload"></span> Upload
+                            </button>
+                            <button type="button" class="btn btn-warning btn-xs" (click)="uploadItem.remove()">
+                                <span class="glyphicon glyphicon-trash"></span> Remove
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </fieldset>
         </div>
     </div>
