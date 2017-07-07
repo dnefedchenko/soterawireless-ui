@@ -155,7 +155,7 @@
             <button type="button" class="btn btn-primary">Export</button>
         </form>
 
-        <div class="row" [ngStyle]="{'margin-top': '10px'}">
+        <div class="row" [ngStyle]="{'margin-top': '10px'}" *ngIf="facilityExists()">
             <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px'}">
                 <legend>Location Import</legend>
 
@@ -205,7 +205,7 @@
             </fieldset>
         </div>
 
-        <div class="row" [ngStyle]="{'margin-top': '10px'}">
+        <div class="row" [ngStyle]="{'margin-top': '10px'}" *ngIf="facilityExists()">
             <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px'}">
                 <legend>Configuration Upload</legend>
 

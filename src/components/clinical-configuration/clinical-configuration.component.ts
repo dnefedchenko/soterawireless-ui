@@ -106,7 +106,7 @@ export class ClinicalConfigurationComponent implements OnInit {
 
     private getMainFacility(): void {
         this.apiService
-            .get("/clinical-configuration-units/main-clinical-configuration-unit")
+            .get("/facility-units/main-facility-unit")
             .subscribe(
                 (response: Response) => {
                     this.facility = response.json();
@@ -204,10 +204,12 @@ export class ClinicalConfigurationComponent implements OnInit {
     }
 
     private updateFacility() {
+        this.facilityForm.addControl("id", this.formBuilder.control(this.facility.id));
         this.apiService
-            .put('/clinical-configuration-units', this.facilityForm.value)
+            .put('/facility-units', this.facilityForm.value)
             .subscribe(
                 (response: Response) => {
+                    this.facility = response.json();
                     this.notificationService.showSuccessNotification(this.facilityForm.get("name").value.concat(" has been updated successfully"), "Success");
                 },
                 (error: any) => {
@@ -217,9 +219,10 @@ export class ClinicalConfigurationComponent implements OnInit {
 
     private createFacility() {
         this.apiService
-            .post('/clinical-configuration-units', this.facilityForm.value)
+            .post('/facility-units', this.facilityForm.value)
             .subscribe(
                 (response: Response) => {
+                    this.facility = response.json();
                     this.notificationService.showSuccessNotification(this.facilityForm.get("name").value.concat(" has been successfully created"), "Success");
                 },
                 (error: any) => {
