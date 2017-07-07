@@ -259,7 +259,7 @@
             <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px', 'padding-bottom': '15px'}">
                 <legend>Care Units</legend>
 
-                <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                <ngb-accordion #acc="ngbAccordion">
                     <ngb-panel *ngFor="let careUnit of careUnits" title="{{careUnit.name}}">
                         <ng-template ngbPanelContent>
                             <care-unit [item]="careUnit"></care-unit>
