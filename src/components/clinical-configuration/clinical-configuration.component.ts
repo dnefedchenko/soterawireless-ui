@@ -42,6 +42,8 @@ export class ClinicalConfigurationComponent implements OnInit {
     hasLocationDropOver: boolean = false;
     hasConfigurationDropOver: boolean = false;
 
+    careUnits: Array<any> = [];
+
     constructor(private apiService: ApiService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
         this.temperatureUnitOptions = [
             {name: 'Celsius'},
@@ -113,6 +115,7 @@ export class ClinicalConfigurationComponent implements OnInit {
                     this.initFacilityForm();
 
                     this.watchAdt();
+                    this.loadCareUnits();
 
                     this.pageLoadingComplete = true;
                 },
@@ -249,5 +252,18 @@ export class ClinicalConfigurationComponent implements OnInit {
 
     public configurationJsonSelected(): boolean {
         return this.configurationUploader.queue.length > 0;
+    }
+
+    private loadCareUnits() {
+        this.apiService
+            .get("/care-units")
+            .subscribe(
+                (response: Response) => {
+                    this.careUnits = response.json();
+                },
+                (error: any) => {
+                    this.notificationService.showErrorNotification("Failed to load care units", "Failure");
+                }
+            );
     }
 }

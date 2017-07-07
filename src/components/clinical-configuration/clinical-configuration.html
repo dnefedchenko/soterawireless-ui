@@ -225,33 +225,47 @@
 
                 <table class="table" *ngIf="configurationJsonSelected()">
                     <thead>
-                    <tr>
-                        <th width="50%">Name</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th width="50%">Name</th>
+                            <th>Status</th>
+                           <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let uploadItem of configurationUploader.queue">
-                        <td>
-                            <strong>{{uploadItem?.file?.name}}</strong>
-                        </td>
-                        <td>
-                            <span *ngIf="uploadItem.isSuccess"><i class="fa fa-check" aria-hidden="true"></i></span>
-                            <span *ngIf="uploadItem.isError"><i class="fa fa-times" aria-hidden="true"></i></span>
-                        </td>
-                        <td nowrap>
-                            <button type="button" class="btn btn-primary btn-xs"
-                                    (click)="uploadItem.upload()" [disabled]="uploadItem.isReady || uploadItem.isUploading || uploadItem.isSuccess">
-                                <span class="glyphicon glyphicon-upload"></span> Upload
-                            </button>
-                            <button type="button" class="btn btn-warning btn-xs" (click)="uploadItem.remove()">
-                                <span class="glyphicon glyphicon-trash"></span> Remove
-                            </button>
-                        </td>
-                    </tr>
+                        <tr *ngFor="let uploadItem of configurationUploader.queue">
+                            <td>
+                                <strong>{{uploadItem?.file?.name}}</strong>
+                            </td>
+                            <td>
+                                <span *ngIf="uploadItem.isSuccess"><i class="fa fa-check" aria-hidden="true"></i></span>
+                                <span *ngIf="uploadItem.isError"><i class="fa fa-times" aria-hidden="true"></i></span>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-primary btn-xs"
+                                        (click)="uploadItem.upload()" [disabled]="uploadItem.isReady || uploadItem.isUploading || uploadItem.isSuccess">
+                                    <span class="glyphicon glyphicon-upload"></span> Upload
+                                </button>
+                                <button type="button" class="btn btn-warning btn-xs" (click)="uploadItem.remove()">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+            </fieldset>
+        </div>
+
+        <div class="row" [ngStyle]="{'margin-top': '10px'}" *ngIf="careUnits.length > 0">
+            <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px', 'padding-bottom': '15px'}">
+                <legend>Care Units</legend>
+
+                <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                    <ngb-panel *ngFor="let careUnit of careUnits" title="{{careUnit.name}}">
+                        <ng-template ngbPanelContent>
+                            <care-unit [item]="careUnit"></care-unit>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
             </fieldset>
         </div>
     </div>

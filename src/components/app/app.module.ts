@@ -18,6 +18,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NotificationService} from "../../services/notification.service";
 import {FileUploadModule} from "ng2-file-upload/index";
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
+import {CareUnitComponent} from "../care-unit/care.unit.component";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 
 
@@ -43,7 +45,8 @@ export function notificationFactory(toastsManager: ToastsManager) {
     declarations: [
         VsmAppComponent,
         LoginComponent,
-        ClinicalConfigurationComponent
+        ClinicalConfigurationComponent,
+        CareUnitComponent
     ],
     imports: [
         BrowserModule,
@@ -54,7 +57,8 @@ export function notificationFactory(toastsManager: ToastsManager) {
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
         ToastModule.forRoot(),
-        FileUploadModule
+        FileUploadModule,
+        NgbModule.forRoot()
     ],
     providers: [
         {provide: BrowserXhr, useClass: CorsService},
