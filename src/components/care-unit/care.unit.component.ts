@@ -6,17 +6,23 @@ import {ApiService} from "../../services/api.service";
     selector: "care-unit",
     template: `
         <form [formGroup]="careUnitForm">
-            <input id="careUnitName" type="text" class="form-control" formControlName="name">
+            <input type="text" class="form-control" formControlName="name"/>
             
-            <div formArrayName="alarmLimits">
+            <h4>Alarm Settings</h4>
+            
+            <fieldset class="vsm-scheduler-border" formArrayName="alarmLimits">
+                <legend>Physiological Alarms</legend>
+                            
                 <div *ngFor="let alarmLimit of careUnitForm.controls.alarmLimits.controls; let i = index">
-                    <div [formGroupName]="i">
-                        <div>
-                            <input type="text" class="form-control" formControlName="name">                        
-                        </div>                    
+                    <div [formGroupName]="i" class="vsm-alarms">
+                            <input type="text" class="vsm-control-input form-control" formControlName="lowBoundary"/>
+                            <input type="text" class="vsm-control-input form-control" formControlName="low"/>
+                            <label class="vsm-control-label">{{alarmLimit.get('label').value}}</label>
+                            <input type="text" class="vsm-control-input form-control" formControlName="highBoundary"/>
+                            <input type="text" class="vsm-control-input form-control" formControlName="high"/>
                     </div>
                 </div>
-            </div>
+            </fieldset>
         </form>
     `
 })
@@ -38,7 +44,7 @@ export class CareUnitComponent implements OnInit {
         let controls: Array<any> = [];
         this.item.alarmLimits.forEach(limit => {
             controls.push(this.formBuilder.group({
-                name: [limit.label, Validators.required],
+                label: [limit.label, Validators.required],
                 low: [limit.low],
                 high: [limit.high],
                 lowBoundary: [limit.lowBoundary],

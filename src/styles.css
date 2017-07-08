@@ -391,3 +391,22 @@ fieldset.vsm-scheduler-border {
 .nv-file-over {
     border: dotted 3px green;
 }
+
+.vsm-control-group {
+    min-width: 545px;
+    max-width: 545px;
+    padding: 1px;
+}
+
+div.vsm-alarms input,
+.vsm-control-input {
+    width: 75px;
+    display: inline-block;
+}
+
+.vsm-control-label {
+    display: inline-block;
+    text-align: center;
+    width: 150px;
+    font-weight: bold;
+}
