@@ -1,12 +1,14 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ApiService} from "../../services/api.service";
+import {Response} from "@angular/http";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
     selector: "care-unit",
     styleUrls: ['care-unit.css'],
     template: `
-        <form [formGroup]="careUnitForm">
+        <form [formGroup]="careUnitForm" (ngSubmit)="update(careUnitForm.value)">
             <input type="text" class="form-control vsm-care-unit-name-input" formControlName="name"/>
             <div class="form-group">
                 <div class="vsm-checkbox vsm-care-unit-enabled">
@@ -94,13 +96,13 @@ import {ApiService} from "../../services/api.service";
 
                             <div class="form-group vsm-margin-bottom-8">
                                 <div class="vsm-checkbox">
-                                    <input id="fallDedection" type="checkbox" formControlName="fallDetection">
+                                    <input id="fallDedection" type="checkbox" formControlName="fallDetection" [value]="fallDetection ? 'On': 'Off'">
                                     <label for="fallDedection" class="blue">Fall detection</label>
                                 </div>
                             </div>
                             <div class="form-group vsm-margin-bottom-8">
                                 <div class="vsm-checkbox">
-                                <input id="inactivity" type="checkbox" formControlName="inactivityAlarm">
+                                <input id="inactivity" type="checkbox" formControlName="inactivityAlarm" [value]="inactivityAlarm ? 'On': 'Off'">
                                 <label for="inactivity" class="blue">Inactivity</label>
                             </div>
                         </div>
@@ -122,10 +124,11 @@ export class CareUnitComponent implements OnInit {
 
     careUnitForm: FormGroup;
 
-    constructor(private formBuilder: FormBuilder, private apiService: ApiService) {}
+    constructor(private formBuilder: FormBuilder, private apiService: ApiService, private notificationService: NotificationService) {}
 
     ngOnInit():void {
         this.careUnitForm = this.formBuilder.group({
+            id: [this.item.id],
             name: [this.item.name, Validators.required],
             enabled: [this.item.enabled],
             alarmLimits: this.formBuilder.array(this.buildAlarmFormControls()),
@@ -133,7 +136,7 @@ export class CareUnitComponent implements OnInit {
             afibRvrEnabled: [this.item.afibRvrEnabled],
             afibRvrHeartRateLimit: [this.item.afibRvrHeartRateLimit],
             vtachVfibEnabled: [this.item.vtachVfibEnabled],
-            asysEnabled: [{value: this.item.asysEnabled, disabled: true}],
+            asysEnabled: [this.item.asysEnabled],
             fallDetection: [this.item.fallDetection],
             inactivityAlarm: [this.item.inactivityAlarm]
         });
@@ -160,4 +163,24 @@ export class CareUnitComponent implements OnInit {
     postureAlarmsEnabled(): boolean {
         return true;
     }
+
+    update(careUnit: any) {
+        this.apiService
+            .put("/care-units", careUnit)
+            .subscribe(
+                (response: Response) => {
+                    this.notificationService.showSuccessNotification(careUnit.name.concat(" has been updated successfully"), "Update");
+                },
+                (error: any) => {
+                    this.notificationService.showErrorNotification("Failed to update ".concat(careUnit.name), "Update");
+                }
+            );
+    }
+
+    /*private prepareBeforeUpdate() {
+        this.careUnitForm.get('alarmLimits').value.forEach(alarmLimit => {
+            alarmLimit.setValue();
+        });
+        this.facilityForm.get('respirationDisplay').setValue(this.facilityForm.get('respirationDisplay').value ? 'On' : 'Off');
+    }*/
 }
