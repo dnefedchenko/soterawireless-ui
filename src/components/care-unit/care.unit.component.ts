@@ -20,7 +20,7 @@ import {NotificationService} from "../../services/notification.service";
             <h4>Alarm Settings</h4>
             
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <fieldset class="vsm-scheduler-border physical-alarms-section" formArrayName="alarmLimits">
                         <legend>Physiological Alarms</legend>
                 
@@ -41,8 +41,8 @@ import {NotificationService} from "../../services/notification.service";
                                 <input type="text" class="vsm-control-input form-control" formControlName="lowBoundary"/>
                                 <input type="text" class="vsm-control-input form-control" formControlName="low"/>
                                 <label class="vsm-control-label">{{alarmLimit.get('label').value}}</label>
-                                <input type="text" class="vsm-control-input form-control" formControlName="highBoundary"/>
                                 <input type="text" class="vsm-control-input form-control" formControlName="high"/>
+                                <input type="text" class="vsm-control-input form-control" formControlName="highBoundary"/>
                             </div>
                         </div>
                 
@@ -96,13 +96,13 @@ import {NotificationService} from "../../services/notification.service";
 
                             <div class="form-group vsm-margin-bottom-8">
                                 <div class="vsm-checkbox">
-                                    <input id="fallDedection" type="checkbox" formControlName="fallDetection" [value]="fallDetection ? 'On': 'Off'">
-                                    <label for="fallDedection" class="blue">Fall detection</label>
+                                    <input id="fallDetection" type="checkbox" formControlName="fallDetection">
+                                    <label for="fallDetection" class="blue">Fall detection</label>
                                 </div>
                             </div>
                             <div class="form-group vsm-margin-bottom-8">
                                 <div class="vsm-checkbox">
-                                <input id="inactivity" type="checkbox" formControlName="inactivityAlarm" [value]="inactivityAlarm ? 'On': 'Off'">
+                                <input id="inactivity" type="checkbox" formControlName="inactivityAlarm">
                                 <label for="inactivity" class="blue">Inactivity</label>
                             </div>
                         </div>
@@ -111,7 +111,7 @@ import {NotificationService} from "../../services/notification.service";
             </div>
             
             <div>
-                <button type="submit" class="btn btn-primary" [disabled]="!careUnitForm.valid">Save</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!careUnitForm.valid">Update</button>
                 <button type="button" class="btn btn-primary float-right" [disabled]="!careUnitForm.valid">Duplicate</button>
                 <button type="button" class="btn btn-primary float-right" [ngStyle]="{'margin-right': '5px'}" [disabled]="!careUnitForm.valid">Remove</button>
             </div>
@@ -124,7 +124,14 @@ export class CareUnitComponent implements OnInit {
 
     careUnitForm: FormGroup;
 
-    constructor(private formBuilder: FormBuilder, private apiService: ApiService, private notificationService: NotificationService) {}
+    options: Array<any> = [];
+
+    constructor(private formBuilder: FormBuilder, private apiService: ApiService, private notificationService: NotificationService) {
+        this.options = [
+            {name: 'On'},
+            {name: 'Off'}
+        ];
+    }
 
     ngOnInit():void {
         this.careUnitForm = this.formBuilder.group({
@@ -137,8 +144,8 @@ export class CareUnitComponent implements OnInit {
             afibRvrHeartRateLimit: [this.item.afibRvrHeartRateLimit],
             vtachVfibEnabled: [this.item.vtachVfibEnabled],
             asysEnabled: [this.item.asysEnabled],
-            fallDetection: [this.item.fallDetection],
-            inactivityAlarm: [this.item.inactivityAlarm]
+            fallDetection: [this.item.fallDetection === this.options[0].name],
+            inactivityAlarm: [this.item.inactivityAlarm === this.options[0].name]
         });
     }
 
@@ -165,6 +172,7 @@ export class CareUnitComponent implements OnInit {
     }
 
     update(careUnit: any) {
+        this.prepareFormBeforeUpdate(careUnit);
         this.apiService
             .put("/care-units", careUnit)
             .subscribe(
@@ -177,10 +185,8 @@ export class CareUnitComponent implements OnInit {
             );
     }
 
-    /*private prepareBeforeUpdate() {
-        this.careUnitForm.get('alarmLimits').value.forEach(alarmLimit => {
-            alarmLimit.setValue();
-        });
-        this.facilityForm.get('respirationDisplay').setValue(this.facilityForm.get('respirationDisplay').value ? 'On' : 'Off');
-    }*/
+    private prepareFormBeforeUpdate(careUnit: any) {
+        careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name: this.options[1].name
+        careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name: this.options[1].name
+    }
 }
