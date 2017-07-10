@@ -60,33 +60,33 @@ import {NotificationService} from "../../services/notification.service";
 
                                 <div class="form-group vsm-margin-bottom-8">
                                     <div class="vsm-checkbox">
-                                        <input id="afibCvrEnabled" type="checkbox" formControlName="afibCvrEnabled">
-                                        <label for="afibCvrEnabled" class="blue">AFIB CVR</label>
+                                        <input id="afibCvrEnabled-{{item.id}}" type="checkbox" formControlName="afibCvrEnabled">
+                                        <label for="afibCvrEnabled-{{item.id}}" class="blue">AFIB CVR</label>
                                     </div>
                                 </div>
                                 <div class="form-group vsm-margin-bottom-8">
                                     <div class="vsm-checkbox">
-                                        <input id="afibRvrEnabled" type="checkbox" formControlName="afibRvrEnabled">
-                                        <label for="afibRvrEnabled" class="blue">AFIB RVR</label>
+                                        <input id="afibRvrEnabled-{{item.id}}" type="checkbox" formControlName="afibRvrEnabled">
+                                        <label for="afibRvrEnabled-{{item.id}}" class="blue">AFIB RVR</label>
                                     </div>
                                 </div>
                                 <div class="form-inline vsm-heart-rate-input">
                                     <div class="form-group">
-                                        <label for="newHeartRateLimit">Limit:&nbsp;</label>
-                                        <input id="newHeartRateLimit" type="number" class="form-control" min="0" max="255" formControlName="afibRvrHeartRateLimit">
+                                        <label for="newHeartRateLimit-{{item.id}}">Limit:&nbsp;</label>
+                                        <input id="newHeartRateLimit-{{item.id}}" type="number" class="form-control" min="0" max="255" formControlName="afibRvrHeartRateLimit">
                                         <span *ngIf="careUnitForm.get('afibRvrHeartRateLimit').value > 255" class="error-message">Value should be in range 0...255</span>
                                     </div>
                                 </div>
                                 <div class="form-group vsm-margin-bottom-8">
                                     <div class="vsm-checkbox">
-                                        <input id="heartRateLimittachVfibEnabled" type="checkbox" formControlName="vtachVfibEnabled">
-                                        <label for="heartRateLimittachVfibEnabled" class="blue">VTACH/VFIB</label>
+                                        <input id="heartRateLimittachVfibEnabled-{{item.id}}" type="checkbox" formControlName="vtachVfibEnabled">
+                                        <label for="heartRateLimittachVfibEnabled-{{item.id}}" class="blue">VTACH/VFIB</label>
                                     </div>
                                 </div>
                                 <div class="form-group vsm-margin-bottom-8">
                                     <div class="vsm-checkbox">
-                                        <input id="asysEnabled" type="checkbox" [checked]="true" formControlName="asysEnabled">
-                                        <label for="asysEnabled" class="blue">Asys</label>
+                                        <input id="asysEnabled-{{item.id}}" type="checkbox" [checked]="true" formControlName="asysEnabled">
+                                        <label for="asysEnabled-{{item.id}}" class="blue">Asys</label>
                                     </div>
                                 </div>
                             </fieldset>
@@ -96,14 +96,14 @@ import {NotificationService} from "../../services/notification.service";
 
                             <div class="form-group vsm-margin-bottom-8">
                                 <div class="vsm-checkbox">
-                                    <input id="fallDetection" type="checkbox" formControlName="fallDetection">
-                                    <label for="fallDetection" class="blue">Fall detection</label>
+                                    <input id="fallDetection-{{item.id}}" type="checkbox" formControlName="fallDetection">
+                                    <label for="fallDetection-{{item.id}}" class="blue">Fall detection</label>
                                 </div>
                             </div>
                             <div class="form-group vsm-margin-bottom-8">
                                 <div class="vsm-checkbox">
-                                <input id="inactivity" type="checkbox" formControlName="inactivityAlarm">
-                                <label for="inactivity" class="blue">Inactivity</label>
+                                <input id="inactivity-{{item.id}}" type="checkbox" formControlName="inactivityAlarm">
+                                <label for="inactivity-{{item.id}}" class="blue">Inactivity</label>
                             </div>
                         </div>
                     </fieldset>
@@ -153,7 +153,7 @@ export class CareUnitComponent implements OnInit {
         let controls: Array<any> = [];
         this.item.alarmLimits.forEach(limit => {
             controls.push(this.formBuilder.group({
-                label: [limit.label, Validators.required],
+                label: [limit.label],
                 low: [limit.low],
                 high: [limit.high],
                 lowBoundary: [limit.lowBoundary],
