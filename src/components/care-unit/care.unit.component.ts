@@ -9,6 +9,10 @@ import {NotificationService} from "../../services/notification.service";
     styleUrls: ['care-unit.css'],
     template: `
         <form [formGroup]="careUnitForm" (ngSubmit)="update(careUnitForm.value)">
+        
+            <div>Form value: {{ careUnitForm.value | json }}</div><br/>
+            <div>Form status: {{ careUnitForm.status | json }}</div>
+        
             <input type="text" class="form-control vsm-care-unit-name-input" formControlName="name"/>
             <div class="form-group">
                 <div class="vsm-checkbox vsm-care-unit-enabled">
@@ -195,9 +199,12 @@ export class CareUnitComponent implements OnInit {
     private watchAlarmLimits(): void {
         this.careUnitForm.get("alarmLimits").valueChanges.subscribe(
             (newArray: Array<any>) => {
-                console.log(newArray);
-                this.careUnitForm.setErrors({"customError": true}, true);
+                this.invalidateForm();
             }
         );
+    }
+
+    private invalidateForm() {
+        this.careUnitForm.get("id").setErrors({alarmLimitError: true});
     }
 }
