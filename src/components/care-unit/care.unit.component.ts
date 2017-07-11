@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from "@angular/core";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl, ValidationErrors} from "@angular/forms";
 import {ApiService} from "../../services/api.service";
 import {Response} from "@angular/http";
 import {NotificationService} from "../../services/notification.service";
@@ -147,6 +147,8 @@ export class CareUnitComponent implements OnInit {
             fallDetection: [this.item.fallDetection === this.options[0].name],
             inactivityAlarm: [this.item.inactivityAlarm === this.options[0].name]
         });
+
+        this.watchAlarmLimits();
     }
 
     private buildAlarmFormControls(): any[] {
@@ -188,5 +190,14 @@ export class CareUnitComponent implements OnInit {
     private prepareFormBeforeUpdate(careUnit: any) {
         careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name: this.options[1].name
         careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name: this.options[1].name
+    }
+
+    private watchAlarmLimits(): void {
+        this.careUnitForm.get("alarmLimits").valueChanges.subscribe(
+            (newArray: Array<any>) => {
+                console.log(newArray);
+                this.careUnitForm.setErrors({"customError": true}, true);
+            }
+        );
     }
 }
