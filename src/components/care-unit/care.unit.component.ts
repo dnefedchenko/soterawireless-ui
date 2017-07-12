@@ -146,6 +146,13 @@ export class CareUnitComponent implements OnInit {
     OXYGEN_SATURATION_LOW_THRESHOLD: number = 70;
     OXYGEN_SATURATION_HIGH_THRESHOLD: number = 100;
 
+    HR_PR_LABEL = 'HR/PR (BPM)';
+    SYSTOLIC_LABEL = 'Systolic BP';
+    DIASTOLIC_LABEL = 'Diastolic BP';
+    MAP_LABEL = 'MAP';
+    RESPIRATION_LABEL = 'Respiration';
+    OXYGEN_LABEL = 'SpO2';
+
     careUnitForm: FormGroup;
 
     options: Array<any> = [];
@@ -181,9 +188,9 @@ export class CareUnitComponent implements OnInit {
             controls.push(this.formBuilder.group({
                 label: [limit.label],
                 low: [limit.low],
-                high: [{value: limit.high, disabled: limit.label === "SpO2"}],
+                high: [{value: limit.high, disabled: limit.label === this.OXYGEN_LABEL}],
                 lowBoundary: [limit.lowBoundary],
-                highBoundary: [{value: limit.highBoundary, disabled: limit.label === "SpO2"}]
+                highBoundary: [{value: limit.highBoundary, disabled: limit.label === this.OXYGEN_LABEL}]
             }));
         });
         return controls;
@@ -245,17 +252,17 @@ export class CareUnitComponent implements OnInit {
 
     private setError(alarm: any):void {
         let message: string = "Range ";
-        if (alarm.label === "HR/PR (BPM)") {
+        if (alarm.label === this.HR_PR_LABEL) {
             message = message.concat("30...240");
-        } else if (alarm.label === "Systolic BP") {
+        } else if (alarm.label === this.SYSTOLIC_LABEL) {
             message = message.concat("60...240");
-        } else if (alarm.label === "Diastolic BP") {
+        } else if (alarm.label === this.DIASTOLIC_LABEL) {
             message = message.concat("40...160");
-        } else if (alarm.label === "MAP") {
+        } else if (alarm.label === this.MAP_LABEL) {
             message = message.concat("50...185");
-        } else if (alarm.label === "Respiration") {
+        } else if (alarm.label === this.RESPIRATION_LABEL) {
             message = message.concat("3...50");
-        } else if (alarm.label === "SpO2") {
+        } else if (alarm.label === this.OXYGEN_LABEL) {
             message = message.concat("70...99");
         }
         message = message.concat(" and condition low_boundary <= low < high <= high_boundary mismatch");
@@ -273,18 +280,22 @@ export class CareUnitComponent implements OnInit {
         let label: string = alarm.label;
         let boundariesValid: boolean = false;
 
-        if (label === "HR/PR (BPM)" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
-            boundariesValid = lowBoundary >= this.HR_PR_LOW_THRESHOLD && highBoundary <= this.HR_PR_HIGH_THRESHOLD;
-        } else if (label === "Systolic BP" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
-            boundariesValid = lowBoundary >= this.SYSTOLIC_LOW_THRESHOLD && highBoundary <= this.SYSTOLIC_HIGH_THRESHOLD;
-        } else if (label === "Diastolic BP" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
-            boundariesValid = lowBoundary >= this.DIASTOLIC_LOW_THRESHOLD && highBoundary <= this.DIASTOLIC_HIGH_THRESHOLD;
-        } else if (label === "MAP" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
-            boundariesValid = lowBoundary >= this.MAP_LOW_THRESHOLD && highBoundary <= this.MAP_HIGH_THRESHOLD;
-        } else if (label === "Respiration" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
-            boundariesValid = lowBoundary >= this.RESPIRATION_LOW_THRESHOLD && highBoundary <= this.RESPIRATION_HIGH_THRESHOLD;
-        } else if (label === "SpO2" && !isNaN(lowBoundary)) {
-            boundariesValid = lowBoundary >= this.OXYGEN_SATURATION_LOW_THRESHOLD && lowBoundary <= this.OXYGEN_SATURATION_HIGH_THRESHOLD;
+        if (!isNaN(lowBoundary) && !isNaN(highBoundary)) {
+            if (label === this.HR_PR_LABEL) {
+                boundariesValid = lowBoundary >= this.HR_PR_LOW_THRESHOLD && highBoundary <= this.HR_PR_HIGH_THRESHOLD;
+            } else if (label === this.SYSTOLIC_LABEL) {
+                boundariesValid = lowBoundary >= this.SYSTOLIC_LOW_THRESHOLD && highBoundary <= this.SYSTOLIC_HIGH_THRESHOLD;
+            } else if (label === this.DIASTOLIC_LABEL) {
+                boundariesValid = lowBoundary >= this.DIASTOLIC_LOW_THRESHOLD && highBoundary <= this.DIASTOLIC_HIGH_THRESHOLD;
+            } else if (label === this.MAP_LABEL) {
+                boundariesValid = lowBoundary >= this.MAP_LOW_THRESHOLD && highBoundary <= this.MAP_HIGH_THRESHOLD;
+            } else if (label === this.RESPIRATION_LABEL) {
+                boundariesValid = lowBoundary >= this.RESPIRATION_LOW_THRESHOLD && highBoundary <= this.RESPIRATION_HIGH_THRESHOLD;
+            }
+        }
+
+        if (label === this.OXYGEN_LABEL) {
+            boundariesValid = lowBoundary >= this.OXYGEN_SATURATION_LOW_THRESHOLD && lowBoundary <   this.OXYGEN_SATURATION_HIGH_THRESHOLD;
         }
 
         return boundariesValid;
@@ -306,6 +317,8 @@ export class CareUnitComponent implements OnInit {
             conditionValid = true;
         } else if (isNaN(low) && isNaN(high) && lowBoundary <= highBoundary) {
             conditionValid = true;
+        } else if (alarm.label === this.OXYGEN_LABEL) {
+            conditionValid = low >= lowBoundary;
         }
 
         return conditionValid;
