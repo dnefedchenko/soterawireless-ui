@@ -59,7 +59,7 @@ import {NotificationService} from "../../services/notification.service";
                 </div>
                             
                 <div class="col-md-4 col-md-offset-1">
-                    <fieldset class="vsm-scheduler-border" *ngIf="ltaAlarmsEnabled()">
+                    <fieldset class="vsm-scheduler-border" *ngIf="ltaAlarmsEnabled">
                                 <legend class="vsm-scheduler-border center-aligned">&nbsp;&nbsp;Arrhythmia Alarms&nbsp;&nbsp;</legend>
 
                                 <div class="form-group vsm-margin-bottom-8">
@@ -95,7 +95,7 @@ import {NotificationService} from "../../services/notification.service";
                                 </div>
                             </fieldset>
                             
-                    <fieldset class="vsm-scheduler-border" *ngIf="postureAlarmsEnabled()">
+                    <fieldset class="vsm-scheduler-border" *ngIf="postureAlarmsEnabled">
                         <legend class="vsm-scheduler-border">&nbsp;&nbsp;Posture Alarms&nbsp;&nbsp;</legend>
 
                             <div class="form-group vsm-margin-bottom-8">
@@ -125,6 +125,9 @@ import {NotificationService} from "../../services/notification.service";
 })
 export class CareUnitComponent implements OnInit {
     @Input() item: any;
+    @Input() unitOfMeasure: string;
+    @Input() postureAlarmsEnabled: boolean;
+    @Input() ltaAlarmsEnabled: boolean;
 
     careUnitForm: FormGroup;
 
@@ -167,14 +170,6 @@ export class CareUnitComponent implements OnInit {
             }));
         });
         return controls;
-    }
-
-    ltaAlarmsEnabled(): boolean {
-        return true;
-    }
-
-    postureAlarmsEnabled(): boolean {
-        return true;
     }
 
     update(careUnit: any) {

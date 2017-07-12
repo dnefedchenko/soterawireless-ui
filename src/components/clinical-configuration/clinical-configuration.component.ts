@@ -181,6 +181,18 @@ export class ClinicalConfigurationComponent implements OnInit {
         return this.facility && this.facility.id !== null && this.facility.id !== undefined;
     }
 
+    arrhythmiaAlarmsEnabled(): boolean {
+        return this.facilityForm.get("arrhythmiaAlarmsEnabled").value;
+    }
+
+    postureAlarmsEnabled(): boolean {
+        return this.facilityForm.get("postureAlarmsEnabled").value;
+    }
+
+    unitsOfMeasure(): string {
+        return this.facilityForm.get("bloodPressureUnitsOfMeasure").value;
+    }
+
     watchAdt(): void {
         this.facilityForm.get('adtEnabled').valueChanges.subscribe(newValue => {
             let adtInput = this.facilityForm.get('nonAdtRequiredFieldLabel');
