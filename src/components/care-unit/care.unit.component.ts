@@ -47,6 +47,10 @@ import {NotificationService} from "../../services/notification.service";
                                 <label class="vsm-control-label">{{alarmLimit.get('label').value}}</label>
                                 <input type="text" class="vsm-control-input form-control" formControlName="high"/>
                                 <input type="text" class="vsm-control-input form-control" formControlName="highBoundary"/>
+                                
+                                <span *ngIf="careUnitForm.get('alarmLimits').value[i].valid !== undefined && !careUnitForm.get('alarmLimits').value[i].valid" class="error-message">
+                                    Alarms should preserve condition: low boundary <= low < high <= high boundary
+                                </span>
                             </div>
                         </div>
                 
@@ -193,14 +197,14 @@ export class CareUnitComponent implements OnInit {
 
     private watchAlarmLimits(): void {
         this.careUnitForm.get("alarmLimits").valueChanges.subscribe(
-            (newArray: Array<any>) => this.checkBoundaries(newArray)
+            (newArray: Array<any>) => this.validate(newArray)
         );
     }
 
-    private checkBoundaries(alarms: Array<any>) {
+    private validate(alarms: Array<any>) {
         let valid: boolean = alarms.every(this.isValid);
         if (!valid) {
-            this.setAlarmsValidity({boundaryError: true})
+            this.setAlarmsValidity({alarmsValidationFailed: true})
         } else {
             this.setAlarmsValidity(null);
         }
@@ -211,7 +215,9 @@ export class CareUnitComponent implements OnInit {
         let low: number = new Number(alarm.low).valueOf();
         let high: number = new Number(alarm.high).valueOf();
         let highBoundary: number = new Number(alarm.highBoundary).valueOf();
-        return lowBoundary <= low && low < high && high <= highBoundary;
+        let valid = lowBoundary <= low && low < high && high <= highBoundary;
+        alarm['valid'] = valid;
+        return valid;
     }
 
     private setAlarmsValidity(validity: any) {
