@@ -1,8 +1,3 @@
-/*.center-aligned {
-    text-align: center;
-    margin-bottom: 10px;
-}*/
-
 .physical-alarms-section {
     text-align: center;
     max-width: 575px;
@@ -52,11 +47,10 @@
     border-right: none;
 }
 
-.lta-alarms {
-    margin-top: 115px;
-    max-width: 300px;
-}
-
 .vsm-heart-rate-input {
     margin-bottom: 15px;
+}
+
+.vsm-alarms input {
+    margin-bottom: 2px;
 }

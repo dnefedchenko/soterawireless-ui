@@ -10,7 +10,7 @@ import {NotificationService} from "../../services/notification.service";
     template: `
         <form [formGroup]="careUnitForm" (ngSubmit)="update(careUnitForm.value)">
         
-            <div>Form value: {{ careUnitForm.value | json }}</div><br/>
+            <!--<div>Form value: {{ careUnitForm.value | json }}</div><br/>-->
             <div>Form status: {{ careUnitForm.status | json }}</div>
         
             <input type="text" class="form-control vsm-care-unit-name-input" formControlName="name"/>
@@ -161,9 +161,9 @@ export class CareUnitComponent implements OnInit {
             controls.push(this.formBuilder.group({
                 label: [limit.label],
                 low: [limit.low],
-                high: [limit.high],
+                high: [{value: limit.high, disabled: limit.label === "SpO2"}],
                 lowBoundary: [limit.lowBoundary],
-                highBoundary: [limit.highBoundary]
+                highBoundary: [{value: limit.highBoundary, disabled: limit.label === "SpO2"}]
             }));
         });
         return controls;
@@ -198,13 +198,28 @@ export class CareUnitComponent implements OnInit {
 
     private watchAlarmLimits(): void {
         this.careUnitForm.get("alarmLimits").valueChanges.subscribe(
-            (newArray: Array<any>) => {
-                this.invalidateForm();
-            }
+            (newArray: Array<any>) => this.checkBoundaries(newArray)
         );
     }
 
-    private invalidateForm() {
-        this.careUnitForm.get("id").setErrors({alarmLimitError: true});
+    private checkBoundaries(alarms: Array<any>) {
+        let valid: boolean = alarms.every(this.isValid);
+        if (!valid) {
+            this.setAlarmsValidity({boundaryError: true})
+        } else {
+            this.setAlarmsValidity(null);
+        }
+    }
+
+    private isValid(alarm: any): boolean {
+        let lowBoundary: number = new Number(alarm.lowBoundary).valueOf();
+        let low: number = new Number(alarm.low).valueOf();
+        let high: number = new Number(alarm.high).valueOf();
+        let highBoundary: number = new Number(alarm.highBoundary).valueOf();
+        return lowBoundary <= low && low < high && high <= highBoundary;
+    }
+
+    private setAlarmsValidity(validity: any) {
+        this.careUnitForm.get("alarmLimits").setErrors(validity);
     }
 }
