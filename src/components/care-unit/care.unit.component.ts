@@ -48,8 +48,8 @@ import {NotificationService} from "../../services/notification.service";
                                 <input type="text" class="vsm-control-input form-control" formControlName="high"/>
                                 <input type="text" class="vsm-control-input form-control" formControlName="highBoundary"/>
                                 
-                                <span *ngIf="careUnitForm.get('alarmLimits').value[i].valid !== undefined && !careUnitForm.get('alarmLimits').value[i].valid" class="error-message">
-                                    Alarms should preserve condition: low boundary <= low < high <= high boundary
+                                <span *ngIf="careUnitForm.get('alarmLimits').value[i].validationMessage !== undefined" class="error-message">
+                                    {{careUnitForm.get('alarmLimits').value[i].validationMessage}}
                                 </span>
                             </div>
                         </div>
@@ -133,6 +133,19 @@ export class CareUnitComponent implements OnInit {
     @Input() postureAlarmsEnabled: boolean;
     @Input() ltaAlarmsEnabled: boolean;
 
+    HR_PR_LOW_THRESHOLD: number = 30;
+    HR_PR_HIGH_THRESHOLD: number = 240;
+    SYSTOLIC_LOW_THRESHOLD: number = 60;
+    SYSTOLIC_HIGH_THRESHOLD: number = 240;
+    DIASTOLIC_LOW_THRESHOLD: number = 40;
+    DIASTOLIC_HIGH_THRESHOLD: number = 160;
+    MAP_LOW_THRESHOLD: number = 50;
+    MAP_HIGH_THRESHOLD: number = 185;
+    RESPIRATION_LOW_THRESHOLD: number = 3;
+    RESPIRATION_HIGH_THRESHOLD: number = 50;
+    OXYGEN_SATURATION_LOW_THRESHOLD: number = 70;
+    OXYGEN_SATURATION_HIGH_THRESHOLD: number = 100;
+
     careUnitForm: FormGroup;
 
     options: Array<any> = [];
@@ -202,25 +215,99 @@ export class CareUnitComponent implements OnInit {
     }
 
     private validate(alarms: Array<any>) {
-        let valid: boolean = alarms.every(this.isValid);
-        if (!valid) {
+        alarms.forEach(alarm => this.checkValidity(alarm));
+
+        if (!alarms.every(this.isValid.bind(this))) {
             this.setAlarmsValidity({alarmsValidationFailed: true})
         } else {
             this.setAlarmsValidity(null);
         }
     }
 
-    private isValid(alarm: any): boolean {
-        let lowBoundary: number = new Number(alarm.lowBoundary).valueOf();
-        let low: number = new Number(alarm.low).valueOf();
-        let high: number = new Number(alarm.high).valueOf();
-        let highBoundary: number = new Number(alarm.highBoundary).valueOf();
-        let valid = lowBoundary <= low && low < high && high <= highBoundary;
-        alarm['valid'] = valid;
+    private checkValidity(alarm: any): boolean {
+        let valid = this.validateBoundaries(alarm) && this.validateCondition(alarm);
+
+        if (!valid) {
+            this.setError(alarm);
+        } else {
+            this.clearError(alarm)
+        }
         return valid;
+    }
+
+    isValid(alarm: any) {
+        return alarm.validationMessage === undefined;
     }
 
     private setAlarmsValidity(validity: any) {
         this.careUnitForm.get("alarmLimits").setErrors(validity);
+    }
+
+    private setError(alarm: any):void {
+        let message: string = "Range ";
+        if (alarm.label === "HR/PR (BPM)") {
+            message = message.concat("30...240");
+        } else if (alarm.label === "Systolic BP") {
+            message = message.concat("60...240");
+        } else if (alarm.label === "Diastolic BP") {
+            message = message.concat("40...160");
+        } else if (alarm.label === "MAP") {
+            message = message.concat("50...185");
+        } else if (alarm.label === "Respiration") {
+            message = message.concat("3...50");
+        } else if (alarm.label === "SpO2") {
+            message = message.concat("70...99");
+        }
+        message = message.concat(" and condition low_boundary <= low < high <= high_boundary mismatch");
+
+        alarm['validationMessage'] = message;
+    }
+
+    private clearError(alarm: any) {
+        alarm['validationMessage'] = undefined;
+    }
+
+    private validateBoundaries(alarm: any): boolean {
+        let lowBoundary: number = new Number(alarm.lowBoundary).valueOf();
+        let highBoundary: number = new Number(alarm.highBoundary).valueOf();
+        let label: string = alarm.label;
+        let boundariesValid: boolean = false;
+
+        if (label === "HR/PR (BPM)" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
+            boundariesValid = lowBoundary >= this.HR_PR_LOW_THRESHOLD && highBoundary <= this.HR_PR_HIGH_THRESHOLD;
+        } else if (label === "Systolic BP" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
+            boundariesValid = lowBoundary >= this.SYSTOLIC_LOW_THRESHOLD && highBoundary <= this.SYSTOLIC_HIGH_THRESHOLD;
+        } else if (label === "Diastolic BP" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
+            boundariesValid = lowBoundary >= this.DIASTOLIC_LOW_THRESHOLD && highBoundary <= this.DIASTOLIC_HIGH_THRESHOLD;
+        } else if (label === "MAP" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
+            boundariesValid = lowBoundary >= this.MAP_LOW_THRESHOLD && highBoundary <= this.MAP_HIGH_THRESHOLD;
+        } else if (label === "Respiration" && !isNaN(lowBoundary) && !isNaN(highBoundary)) {
+            boundariesValid = lowBoundary >= this.RESPIRATION_LOW_THRESHOLD && highBoundary <= this.RESPIRATION_HIGH_THRESHOLD;
+        } else if (label === "SpO2" && !isNaN(lowBoundary)) {
+            boundariesValid = lowBoundary >= this.OXYGEN_SATURATION_LOW_THRESHOLD && lowBoundary <= this.OXYGEN_SATURATION_HIGH_THRESHOLD;
+        }
+
+        return boundariesValid;
+    }
+
+    private validateCondition(alarm: any) {
+        let lowBoundary: number = new Number(alarm.lowBoundary).valueOf();
+        let low: number = new Number(alarm.low).valueOf();
+        let high: number = new Number(alarm.high).valueOf();
+        let highBoundary: number = new Number(alarm.highBoundary).valueOf();
+
+        let conditionValid: boolean = false;
+
+        if (!isNaN(low) && !isNaN(high) && low >= lowBoundary && high > low && high <= highBoundary) {
+            conditionValid = true;
+        } else if (isNaN(low) && !isNaN(high) && high >= lowBoundary && high <= highBoundary) {
+            conditionValid = true;
+        } else if (!isNaN(low) && isNaN(high) && low >= lowBoundary && low <= highBoundary) {
+            conditionValid = true;
+        } else if (isNaN(low) && isNaN(high) && lowBoundary <= highBoundary) {
+            conditionValid = true;
+        }
+
+        return conditionValid;
     }
 }
