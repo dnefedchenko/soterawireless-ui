@@ -242,14 +242,6 @@ export class CareUnitComponent implements OnInit {
     }
 
     private validateAlarm(alarm: any): boolean {
-        /*let valid = this.validateBoundaries(alarm) && this.validateCondition(alarm);
-
-        if (!valid) {
-            this.setError(alarm);
-        } else {
-            this.clearError(alarm)
-        }
-        return valid;*/
         return this.validateBoundaries(alarm) && this.validateCondition(alarm);
     }
 
@@ -275,10 +267,22 @@ export class CareUnitComponent implements OnInit {
             } else if (label === this.RESPIRATION_LABEL) {
                 boundariesValid = lowBoundary >= this.RESPIRATION_LOW_THRESHOLD && highBoundary <= this.RESPIRATION_HIGH_THRESHOLD;
             }
+        } else if (!isNaN(lowBoundary) && isNaN(highBoundary)) {
+            if (label === this.HR_PR_LABEL) {
+                boundariesValid = lowBoundary >= this.HR_PR_LOW_THRESHOLD;
+            } else if (label === this.SYSTOLIC_LABEL) {
+                boundariesValid = lowBoundary >= this.SYSTOLIC_LOW_THRESHOLD;
+            } else if (label === this.DIASTOLIC_LABEL) {
+                boundariesValid = lowBoundary >= this.DIASTOLIC_LOW_THRESHOLD;
+            } else if (label === this.MAP_LABEL) {
+                boundariesValid = lowBoundary >= this.MAP_LOW_THRESHOLD;
+            } else if (label === this.RESPIRATION_LABEL) {
+                boundariesValid = lowBoundary >= this.RESPIRATION_LOW_THRESHOLD;
+            }
         }
 
         if (label === this.OXYGEN_LABEL) {
-            boundariesValid = lowBoundary >= this.OXYGEN_SATURATION_LOW_THRESHOLD && lowBoundary <   this.OXYGEN_SATURATION_HIGH_THRESHOLD;
+            boundariesValid = lowBoundary >= this.OXYGEN_SATURATION_LOW_THRESHOLD && lowBoundary < this.OXYGEN_SATURATION_HIGH_THRESHOLD;
         }
 
         if (!boundariesValid) {
@@ -322,6 +326,8 @@ export class CareUnitComponent implements OnInit {
         let conditionValid: boolean = false;
 
         if (!isNaN(low) && !isNaN(high) && low >= lowBoundary && high > low && high <= highBoundary) {
+            conditionValid = true;
+        } else if (!isNaN(low) && !isNaN(high) && isNaN(highBoundary) && low >= lowBoundary && high > low) {
             conditionValid = true;
         } else if (isNaN(low) && !isNaN(high) && high >= lowBoundary && high <= highBoundary) {
             conditionValid = true;
