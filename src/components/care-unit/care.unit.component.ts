@@ -48,8 +48,11 @@ import {NotificationService} from "../../services/notification.service";
                                 <input type="text" class="vsm-control-input form-control" formControlName="high"/>
                                 <input type="text" class="vsm-control-input form-control" formControlName="highBoundary"/>
                                 
-                                <span *ngIf="careUnitForm.get('alarmLimits').value[i].validationMessage !== undefined" class="error-message">
-                                    {{careUnitForm.get('alarmLimits').value[i].validationMessage}}
+                                <span *ngIf="careUnitForm.get('alarmLimits').value[i].boundaryError !== undefined" class="error-message">
+                                    {{careUnitForm.get('alarmLimits').value[i].boundaryError}}
+                                </span>
+                                <span *ngIf="careUnitForm.get('alarmLimits').value[i].conditionError !== undefined" class="error-message">
+                                    {{careUnitForm.get('alarmLimits').value[i].conditionError}}
                                 </span>
                             </div>
                         </div>
@@ -146,12 +149,15 @@ export class CareUnitComponent implements OnInit {
     OXYGEN_SATURATION_LOW_THRESHOLD: number = 70;
     OXYGEN_SATURATION_HIGH_THRESHOLD: number = 100;
 
-    HR_PR_LABEL = 'HR/PR (BPM)';
-    SYSTOLIC_LABEL = 'Systolic BP';
-    DIASTOLIC_LABEL = 'Diastolic BP';
-    MAP_LABEL = 'MAP';
-    RESPIRATION_LABEL = 'Respiration';
-    OXYGEN_LABEL = 'SpO2';
+    HR_PR_LABEL = "HR/PR (BPM)";
+    SYSTOLIC_LABEL = "Systolic BP";
+    DIASTOLIC_LABEL = "Diastolic BP";
+    MAP_LABEL = "MAP";
+    RESPIRATION_LABEL = "Respiration";
+    OXYGEN_LABEL = "SpO2";
+
+    BOUNDARY_ERROR_PROPERTY_NAME = "boundaryError";
+    CONDITION_ERROR_PROPERTY_NAME = "conditionError";
 
     careUnitForm: FormGroup;
 
@@ -222,56 +228,33 @@ export class CareUnitComponent implements OnInit {
     }
 
     private validate(alarms: Array<any>) {
-        alarms.forEach(alarm => this.checkValidity(alarm));
+        alarms.forEach(alarm => this.validateAlarm(alarm));
 
         if (!alarms.every(this.isValid.bind(this))) {
-            this.setAlarmsValidity({alarmsValidationFailed: true})
+            this.toggleFormValidity({alarmsValidationFailed: true})
         } else {
-            this.setAlarmsValidity(null);
+            this.toggleFormValidity(null);
         }
     }
 
-    private checkValidity(alarm: any): boolean {
-        let valid = this.validateBoundaries(alarm) && this.validateCondition(alarm);
+    private toggleFormValidity(validity: any) {
+        this.careUnitForm.get("alarmLimits").setErrors(validity);
+    }
+
+    private validateAlarm(alarm: any): boolean {
+        /*let valid = this.validateBoundaries(alarm) && this.validateCondition(alarm);
 
         if (!valid) {
             this.setError(alarm);
         } else {
             this.clearError(alarm)
         }
-        return valid;
+        return valid;*/
+        return this.validateBoundaries(alarm) && this.validateCondition(alarm);
     }
 
     isValid(alarm: any) {
         return alarm.validationMessage === undefined;
-    }
-
-    private setAlarmsValidity(validity: any) {
-        this.careUnitForm.get("alarmLimits").setErrors(validity);
-    }
-
-    private setError(alarm: any):void {
-        let message: string = "Range ";
-        if (alarm.label === this.HR_PR_LABEL) {
-            message = message.concat("30...240");
-        } else if (alarm.label === this.SYSTOLIC_LABEL) {
-            message = message.concat("60...240");
-        } else if (alarm.label === this.DIASTOLIC_LABEL) {
-            message = message.concat("40...160");
-        } else if (alarm.label === this.MAP_LABEL) {
-            message = message.concat("50...185");
-        } else if (alarm.label === this.RESPIRATION_LABEL) {
-            message = message.concat("3...50");
-        } else if (alarm.label === this.OXYGEN_LABEL) {
-            message = message.concat("70...99");
-        }
-        message = message.concat(" and condition low_boundary <= low < high <= high_boundary mismatch");
-
-        alarm['validationMessage'] = message;
-    }
-
-    private clearError(alarm: any) {
-        alarm['validationMessage'] = undefined;
     }
 
     private validateBoundaries(alarm: any): boolean {
@@ -298,7 +281,36 @@ export class CareUnitComponent implements OnInit {
             boundariesValid = lowBoundary >= this.OXYGEN_SATURATION_LOW_THRESHOLD && lowBoundary <   this.OXYGEN_SATURATION_HIGH_THRESHOLD;
         }
 
+        if (!boundariesValid) {
+            this.setBoundaryError(alarm);
+        } else {
+            this.clearBoundaryError(alarm);
+        }
+
         return boundariesValid;
+    }
+
+    private setBoundaryError(alarm: any):void {
+        let message: string = "Value should be in range ";
+        if (alarm.label === this.HR_PR_LABEL) {
+            message = message.concat("30...240");
+        } else if (alarm.label === this.SYSTOLIC_LABEL) {
+            message = message.concat("60...240");
+        } else if (alarm.label === this.DIASTOLIC_LABEL) {
+            message = message.concat("40...160");
+        } else if (alarm.label === this.MAP_LABEL) {
+            message = message.concat("50...185");
+        } else if (alarm.label === this.RESPIRATION_LABEL) {
+            message = message.concat("3...50");
+        } else if (alarm.label === this.OXYGEN_LABEL) {
+            message = message.concat("70...99");
+        }
+
+        alarm[this.BOUNDARY_ERROR_PROPERTY_NAME] = message;
+    }
+
+    private clearBoundaryError(alarm: any) {
+        alarm[this.BOUNDARY_ERROR_PROPERTY_NAME] = undefined;
     }
 
     private validateCondition(alarm: any) {
@@ -321,6 +333,20 @@ export class CareUnitComponent implements OnInit {
             conditionValid = low >= lowBoundary;
         }
 
+        if (!conditionValid) {
+            this.setConditionError(alarm);
+        } else {
+            this.clearConditionError(alarm);
+        }
+
         return conditionValid;
+    }
+
+    private setConditionError(alarm: any): void {
+        alarm[this.CONDITION_ERROR_PROPERTY_NAME] = "Value should satisfy condition low_boundary <= low < high <= high_boundary";
+    }
+
+    private clearConditionError(alarm: any): void {
+        alarm[this.CONDITION_ERROR_PROPERTY_NAME] = undefined;
     }
 }
