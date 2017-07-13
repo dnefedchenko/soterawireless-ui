@@ -246,7 +246,8 @@ export class CareUnitComponent implements OnInit {
     }
 
     isValid(alarm: any) {
-        return alarm.validationMessage === undefined;
+        return alarm[this.BOUNDARY_ERROR_PROPERTY_NAME] === undefined
+            && alarm[this.CONDITION_ERROR_PROPERTY_NAME] === undefined;
     }
 
     private validateBoundaries(alarm: any): boolean {
