@@ -216,8 +216,8 @@ export class MmHgCareUnitComponent implements OnInit {
     }
 
     private prepareFormBeforeUpdate(careUnit: any) {
-        careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name: this.options[1].name
-        careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name: this.options[1].name
+        careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name: this.options[1].name;
+        careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name: this.options[1].name;
     }
 
     private watchAlarmLimits(): void {

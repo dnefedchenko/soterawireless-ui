@@ -135,17 +135,14 @@ export class KpaCareUnitComponent implements OnInit {
     @Input() postureAlarmsEnabled: boolean;
     @Input() ltaAlarmsEnabled: boolean;
 
-
+    HR_PR_LOW_THRESHOLD: number = 30;
+    HR_PR_HIGH_THRESHOLD: number = 240;
     SYSTOLIC_LOW_THRESHOLD = 8.0;
     SYSTOLIC_HIGH_THRESHOLD = 31.9;
     DIASTOLIC_LOW_THRESHOLD = 5.4;
     DIASTOLIC_HIGH_THRESHOLD = 21.3;
     MAP_LOW_THRESHOLD = 6.7;
     MAP_HIGH_THRESHOLD = 24.6;
-
-
-    HR_PR_LOW_THRESHOLD: number = 30;
-    HR_PR_HIGH_THRESHOLD: number = 240;
     RESPIRATION_LOW_THRESHOLD: number = 3;
     RESPIRATION_HIGH_THRESHOLD: number = 50;
     OXYGEN_SATURATION_LOW_THRESHOLD: number = 70;
@@ -219,8 +216,8 @@ export class KpaCareUnitComponent implements OnInit {
     }
 
     private prepareFormBeforeUpdate(careUnit: any) {
-        careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name: this.options[1].name
-        careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name: this.options[1].name
+        careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name: this.options[1].name;
+        careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name: this.options[1].name;
     }
 
     private watchAlarmLimits(): void {
@@ -302,11 +299,11 @@ export class KpaCareUnitComponent implements OnInit {
         if (alarm.label === this.HR_PR_LABEL) {
             message = message.concat("30...240");
         } else if (alarm.label === this.SYSTOLIC_LABEL) {
-            message = message.concat("60...240");
+            message = message.concat("8.0...39.1");
         } else if (alarm.label === this.DIASTOLIC_LABEL) {
-            message = message.concat("40...160");
+            message = message.concat("5.4...21.3");
         } else if (alarm.label === this.MAP_LABEL) {
-            message = message.concat("50...185");
+            message = message.concat("6.7...24.6");
         } else if (alarm.label === this.RESPIRATION_LABEL) {
             message = message.concat("3...50");
         } else if (alarm.label === this.OXYGEN_LABEL) {
@@ -339,7 +336,7 @@ export class KpaCareUnitComponent implements OnInit {
         } else if (isNaN(low) && isNaN(high) && lowBoundary <= highBoundary) {
             conditionValid = true;
         } else if (alarm.label === this.OXYGEN_LABEL) {
-            conditionValid = low >= lowBoundary;
+            conditionValid = low >= lowBoundary && low <= this.OXYGEN_SATURATION_HIGH_THRESHOLD;
         }
 
         if (!conditionValid) {

@@ -262,15 +262,15 @@
                 <ngb-accordion #acc="ngbAccordion">
                     <ngb-panel *ngFor="let careUnit of careUnits" title="{{careUnit.name}}">
                         <ng-template ngbPanelContent>
-                            <mmhg-care-unit *ngIf="kPa()" [item]="careUnit"
+                            <kpa-care-unit *ngIf="kPa()" [item]="careUnit"
+                                           [postureAlarmsEnabled]="postureAlarmsEnabled()"
+                                           [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()">
+                            </kpa-care-unit>
+
+                            <mmhg-care-unit *ngIf="!kPa()" [item]="careUnit"
                                        [postureAlarmsEnabled]="postureAlarmsEnabled()"
                                        [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()">
                             </mmhg-care-unit>
-
-                            <kpa-care-unit *ngIf="!kPa()" [item]="careUnit"
-                                       [postureAlarmsEnabled]="postureAlarmsEnabled()"
-                                       [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()">
-                            </kpa-care-unit>
                         </ng-template>
                     </ngb-panel>
                 </ngb-accordion>
