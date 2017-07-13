@@ -189,8 +189,8 @@ export class ClinicalConfigurationComponent implements OnInit {
         return this.facilityForm.get("postureAlarmsEnabled").value;
     }
 
-    unitsOfMeasure(): string {
-        return this.facilityForm.get("bloodPressureUnitsOfMeasure").value;
+    kPa(): boolean {
+        return this.facilityForm.get("bloodPressureUnitsOfMeasure").value === this.bloodPressureUnitOptions[1].name;
     }
 
     watchAdt(): void {

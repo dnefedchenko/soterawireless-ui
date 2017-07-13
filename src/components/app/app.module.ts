@@ -18,8 +18,9 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NotificationService} from "../../services/notification.service";
 import {FileUploadModule} from "ng2-file-upload/index";
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
-import {CareUnitComponent} from "../care-unit/care.unit.component";
+import {MmHgCareUnitComponent} from "../care-unit/mmhg.care.unit.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {KpaCareUnitComponent} from "../care-unit/kpa.care.unit.component";
 
 
 
@@ -46,7 +47,8 @@ export function notificationFactory(toastsManager: ToastsManager) {
         VsmAppComponent,
         LoginComponent,
         ClinicalConfigurationComponent,
-        CareUnitComponent
+        MmHgCareUnitComponent,
+        KpaCareUnitComponent
     ],
     imports: [
         BrowserModule,

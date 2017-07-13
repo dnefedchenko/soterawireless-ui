@@ -5,7 +5,7 @@ import {Response} from "@angular/http";
 import {NotificationService} from "../../services/notification.service";
 
 @Component({
-    selector: "care-unit",
+    selector: "kpa-care-unit",
     styleUrls: ['care-unit.css'],
     template: `
         <form [formGroup]="careUnitForm" (ngSubmit)="update(careUnitForm.value)">
@@ -130,20 +130,22 @@ import {NotificationService} from "../../services/notification.service";
         </form>
     `
 })
-export class CareUnitComponent implements OnInit {
+export class KpaCareUnitComponent implements OnInit {
     @Input() item: any;
-    @Input() unitOfMeasure: string;
     @Input() postureAlarmsEnabled: boolean;
     @Input() ltaAlarmsEnabled: boolean;
 
+
+    SYSTOLIC_LOW_THRESHOLD = 8.0;
+    SYSTOLIC_HIGH_THRESHOLD = 31.9;
+    DIASTOLIC_LOW_THRESHOLD = 5.4;
+    DIASTOLIC_HIGH_THRESHOLD = 21.3;
+    MAP_LOW_THRESHOLD = 6.7;
+    MAP_HIGH_THRESHOLD = 24.6;
+
+
     HR_PR_LOW_THRESHOLD: number = 30;
     HR_PR_HIGH_THRESHOLD: number = 240;
-    SYSTOLIC_LOW_THRESHOLD: number = 60;
-    SYSTOLIC_HIGH_THRESHOLD: number = 240;
-    DIASTOLIC_LOW_THRESHOLD: number = 40;
-    DIASTOLIC_HIGH_THRESHOLD: number = 160;
-    MAP_LOW_THRESHOLD: number = 50;
-    MAP_HIGH_THRESHOLD: number = 185;
     RESPIRATION_LOW_THRESHOLD: number = 3;
     RESPIRATION_HIGH_THRESHOLD: number = 50;
     OXYGEN_SATURATION_LOW_THRESHOLD: number = 70;
