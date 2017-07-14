@@ -21,6 +21,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awes
 import {MmHgCareUnitComponent} from "../care-unit/mmhg.care.unit.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {KpaCareUnitComponent} from "../care-unit/kpa.care.unit.component";
+import {CareUnitListComponent} from "../care-unit/care.unit.list.component";
 
 
 
@@ -47,6 +48,7 @@ export function notificationFactory(toastsManager: ToastsManager) {
         VsmAppComponent,
         LoginComponent,
         ClinicalConfigurationComponent,
+        CareUnitListComponent,
         MmHgCareUnitComponent,
         KpaCareUnitComponent
     ],

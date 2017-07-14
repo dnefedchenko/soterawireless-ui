@@ -259,7 +259,9 @@
             <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px', 'padding-bottom': '15px'}">
                 <legend>Care Units</legend>
 
-                <ngb-accordion #acc="ngbAccordion">
+                <care-unit-list [isKPa]="kPa()" [careUnits]="careUnits"></care-unit-list>
+
+                <!--<ngb-accordion #acc="ngbAccordion">
                     <ngb-panel *ngFor="let careUnit of careUnits" title="{{careUnit.name}}">
                         <ng-template ngbPanelContent>
                             <kpa-care-unit *ngIf="kPa()" [item]="careUnit" [isNew]="false"
@@ -279,7 +281,7 @@
                             </mmhg-care-unit>
                         </ng-template>
                     </ngb-panel>
-                </ngb-accordion>
+                </ngb-accordion>-->
             </fieldset>
         </div>
 
