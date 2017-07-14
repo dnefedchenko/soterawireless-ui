@@ -266,14 +266,16 @@
                                            [postureAlarmsEnabled]="postureAlarmsEnabled()"
                                            [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
                                            (onUpdateEmitter)="updateList($event)"
-                                           (onDeleteEmitter)="removeFromList($event)">
+                                           (onDeleteEmitter)="removeFromList($event)"
+                                           (onDuplicateEmitter)="copyCareUnit($event)">
                             </kpa-care-unit>
 
                             <mmhg-care-unit *ngIf="!kPa()" [item]="careUnit" [isNew]="false"
                                        [postureAlarmsEnabled]="postureAlarmsEnabled()"
                                        [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
                                        (onUpdateEmitter)="updateList($event)"
-                                       (onDeleteEmitter)="removeFromList($event)">
+                                       (onDeleteEmitter)="removeFromList($event)"
+                                       (onDuplicateEmitter)="copyCareUnit($event)">
                             </mmhg-care-unit>
                         </ng-template>
                     </ngb-panel>

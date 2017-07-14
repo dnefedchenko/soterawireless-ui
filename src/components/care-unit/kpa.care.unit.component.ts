@@ -119,7 +119,7 @@ import {NotificationService} from "../../services/notification.service";
             
             <div *ngIf="!isNew">
                 <button type="submit" class="btn btn-primary" [disabled]="!careUnitForm.valid">Update</button>
-                <button type="button" class="btn btn-primary float-right" [disabled]="!careUnitForm.valid">Duplicate</button>
+                <button type="button" class="btn btn-primary float-right" [disabled]="!careUnitForm.valid" (click)="duplicate()">Duplicate</button>
                 <button type="button" class="btn btn-primary float-right" [ngStyle]="{'margin-right': '5px'}" 
                     [disabled]="!careUnitForm.valid" (click)="remove()">Remove</button>
             </div>
@@ -141,6 +141,7 @@ export class KpaCareUnitComponent implements OnInit {
     @Output() onCreateEmitter: EventEmitter<any>;
     @Output() onUpdateEmitter: EventEmitter<any>;
     @Output() onDeleteEmitter: EventEmitter<any>;
+    @Output() onDuplicateEmitter: EventEmitter<any>;
 
     HR_PR_LOW_THRESHOLD: number = 30;
     HR_PR_HIGH_THRESHOLD: number = 240;
@@ -179,6 +180,7 @@ export class KpaCareUnitComponent implements OnInit {
         this.onCreateEmitter = new EventEmitter();
         this.onUpdateEmitter = new EventEmitter();
         this.onDeleteEmitter = new EventEmitter();
+        this.onDuplicateEmitter = new EventEmitter();
     }
 
     ngOnInit():void {
@@ -410,5 +412,9 @@ export class KpaCareUnitComponent implements OnInit {
                     this.notificationService.showErrorNotification(`Failed to delete ${this.item.name}`, "Delete");
                 }
             );
+    }
+
+    duplicate(): void {
+        this.onDuplicateEmitter.emit(this.careUnitForm.value);
     }
 }

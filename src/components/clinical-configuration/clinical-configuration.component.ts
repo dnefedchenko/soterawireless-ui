@@ -352,4 +352,16 @@ export class ClinicalConfigurationComponent implements OnInit {
     removeFromList(id: string): void {
         this.careUnits = this.careUnits.filter(item => item.id !== id);
     }
+
+    copyCareUnit(careUnit: any): void {
+        let careUnitCopy = JSON.parse(JSON.stringify(careUnit));
+        careUnitCopy.id = undefined;
+        careUnitCopy.name = careUnitCopy.name.concat("(copy)");
+        if (this.kPa()) {
+            this.kPaCareUnit = careUnitCopy;
+        } else {
+            this.mmHgCareUnit = careUnitCopy;
+        }
+        this.showCareUnitForm();
+    }
 }
