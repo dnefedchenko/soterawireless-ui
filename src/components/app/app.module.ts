@@ -21,6 +21,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awes
 import {MmHgCareUnitComponent} from "../care-unit/mmhg.care.unit.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {KpaCareUnitComponent} from "../care-unit/kpa.care.unit.component";
+import {CareUnitService} from "../../services/care.unit.service";
 
 
 
@@ -40,6 +41,10 @@ export function authenticationServiceFactory(apiService: ApiService) {
 
 export function notificationFactory(toastsManager: ToastsManager) {
     return new NotificationService(toastsManager);
+}
+
+export function careUnitServiceFactory(apiService: ApiService, notificationService: NotificationService) {
+    return new CareUnitService(apiService, notificationService);
 }
 
 @NgModule({
@@ -80,6 +85,11 @@ export function notificationFactory(toastsManager: ToastsManager) {
             provide: NotificationService,
             useFactory: notificationFactory,
             deps: [ToastsManager]
+        },
+        {
+            provide: CareUnitService,
+            useFactory: careUnitServiceFactory,
+            deps: [ApiService, NotificationService]
         },
         {provide: RouterGuard, useClass: RouterGuard},
         {provide: LocationStrategy, useClass: HashLocationStrategy}

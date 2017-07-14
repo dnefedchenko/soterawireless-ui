@@ -1,8 +1,8 @@
 import {Component, Input, OnInit, EventEmitter, Output} from "@angular/core";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ApiService} from "../../services/api.service";
-import {Response} from "@angular/http";
 import {NotificationService} from "../../services/notification.service";
+import {CareUnitService} from "../../services/care.unit.service";
 
 @Component({
     selector: "mmhg-care-unit",
@@ -48,7 +48,8 @@ export class MmHgCareUnitComponent implements OnInit {
 
     options: Array<any> = [];
 
-    constructor(private formBuilder: FormBuilder, private apiService: ApiService, private notificationService: NotificationService) {
+    constructor(private formBuilder: FormBuilder, private careUnitService: CareUnitService,
+                private apiService: ApiService, private notificationService: NotificationService) {
         this.options = [
             {name: 'On'},
             {name: 'Off'}
@@ -66,7 +67,7 @@ export class MmHgCareUnitComponent implements OnInit {
             id: [this.item.id],
             name: [this.item.name, Validators.required],
             enabled: [this.item.enabled],
-            alarmLimits: this.formBuilder.array(this.buildAlarmFormControls()),
+            alarmLimits: this.formBuilder.array(this.careUnitService.buildAlarmFormControls(this.item.alarmLimits, this.formBuilder)),
             afibCvrEnabled: [this.item.afibCvrEnabled],
             afibRvrEnabled: [this.item.afibRvrEnabled],
             afibRvrHeartRateLimit: [this.item.afibRvrHeartRateLimit],
@@ -77,20 +78,6 @@ export class MmHgCareUnitComponent implements OnInit {
         });
 
         this.watchAlarmLimits();
-    }
-
-    private buildAlarmFormControls(): any[] {
-        let controls: Array<any> = [];
-        this.item.alarmLimits.forEach(limit => {
-            controls.push(this.formBuilder.group({
-                label: [limit.label],
-                low: [limit.low],
-                high: [{value: limit.high, disabled: limit.label === this.OXYGEN_LABEL}],
-                lowBoundary: [limit.lowBoundary],
-                highBoundary: [{value: limit.highBoundary, disabled: limit.label === this.OXYGEN_LABEL}]
-            }));
-        });
-        return controls;
     }
 
     saveOrUpdate(careUnit: any) {
@@ -106,31 +93,11 @@ export class MmHgCareUnitComponent implements OnInit {
     }
 
     private save(careUnit: any): void {
-        this.apiService
-            .post("/care-units", careUnit)
-            .subscribe(
-                (response: Response) => {
-                    this.notificationService.showSuccessNotification(careUnit.name.concat(" has been created successfully"), "Create");
-                    this.onCreateEmitter.emit(response.json());
-                },
-                (error: any) => {
-                    this.notificationService.showErrorNotification("Failed to update ".concat(careUnit.name), "Create");
-                }
-            );
+        this.careUnitService.save(careUnit, this.onCreateEmitter);
     }
 
     private update(careUnit: any): void {
-        this.apiService
-            .put("/care-units", careUnit)
-            .subscribe(
-                (response: Response) => {
-                    this.notificationService.showSuccessNotification(careUnit.name.concat(" has been updated successfully"), "Update");
-                    this.onUpdateEmitter.emit(response.json());
-                },
-                (error: any) => {
-                    this.notificationService.showErrorNotification("Failed to update ".concat(careUnit.name), "Update");
-                }
-            );
+        this.careUnitService.update(careUnit, this.onUpdateEmitter);
     }
 
     private prepareFormBeforeUpdate(careUnit: any) {
@@ -279,17 +246,7 @@ export class MmHgCareUnitComponent implements OnInit {
     }
 
     remove(): void {
-        this.apiService
-            .delete(`/care-units/${this.item.id}`)
-            .subscribe(
-                (response: Response) => {
-                    this.notificationService.showSuccessNotification(`${this.item.name} has been deleted`, "Delete")
-                    this.onDeleteEmitter.emit(this.item.id);
-                },
-                (error: any) => {
-                    this.notificationService.showErrorNotification(`Failed to delete ${this.item.name}`, "Delete");
-                }
-            );
+        this.careUnitService.remove(this.item.id, this.item.name, this.onDeleteEmitter);
     }
 
     duplicate(): void {
