@@ -268,12 +268,19 @@ export class ClinicalConfigurationComponent implements OnInit {
             .put('/facility-units', this.facilityForm.value)
             .subscribe(
                 (response: Response) => {
+                    this.reloadCareUnits();
                     this.facility = response.json();
                     this.notificationService.showSuccessNotification(this.facilityForm.get("name").value.concat(" has been updated successfully"), "Success");
                 },
                 (error: any) => {
                     this.notificationService.showErrorNotification("Failed to update clinical-configuration", "Error");
                 });
+    }
+
+    private reloadCareUnits() {
+        if (this.facilityForm.get("bloodPressureUnitsOfMeasure").value !== this.facility.bloodPressureUnitsOfMeasure) {
+            this.loadCareUnits();
+        }
     }
 
     private createFacility() {
