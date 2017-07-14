@@ -148,11 +148,11 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid" *ngIf="facilityExists()">Update</button>
-            <button type="submit" class="btn btn-primary" [disabled]="!facilityForm.valid" *ngIf="!facilityExists()">Create</button>
-            <button type="button" class="btn btn-primary">Publish</button>
-            <button type="button" class="btn btn-primary">PDF</button>
-            <button type="button" class="btn btn-primary">Export</button>
+            <button type="submit" class="btn btn-outline-primary" [disabled]="!facilityForm.valid" *ngIf="facilityExists()">Update</button>
+            <button type="submit" class="btn btn-outline-primary" [disabled]="!facilityForm.valid" *ngIf="!facilityExists()">Create</button>
+            <button type="button" class="btn btn-outline-primary">Publish</button>
+            <button type="button" class="btn btn-outline-primary">PDF</button>
+            <button type="button" class="btn btn-outline-primary">Export</button>
         </form>
 
         <div class="row" [ngStyle]="{'margin-top': '10px'}" *ngIf="facilityExists()">
@@ -262,19 +262,45 @@
                 <ngb-accordion #acc="ngbAccordion">
                     <ngb-panel *ngFor="let careUnit of careUnits" title="{{careUnit.name}}">
                         <ng-template ngbPanelContent>
-                            <kpa-care-unit *ngIf="kPa()" [item]="careUnit"
+                            <kpa-care-unit *ngIf="kPa()" [item]="careUnit" [isNew]="false"
                                            [postureAlarmsEnabled]="postureAlarmsEnabled()"
-                                           [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()">
+                                           [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
+                                           (onUpdateEmitter)="updateList($event)"
+                                           (onDeleteEmitter)="removeFromList($event)">
                             </kpa-care-unit>
 
-                            <mmhg-care-unit *ngIf="!kPa()" [item]="careUnit"
+                            <mmhg-care-unit *ngIf="!kPa()" [item]="careUnit" [isNew]="false"
                                        [postureAlarmsEnabled]="postureAlarmsEnabled()"
-                                       [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()">
+                                       [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
+                                       (onUpdateEmitter)="updateList($event)"
+                                       (onDeleteEmitter)="removeFromList($event)">
                             </mmhg-care-unit>
                         </ng-template>
                     </ngb-panel>
                 </ngb-accordion>
             </fieldset>
         </div>
+
+        <div class="row"  [ngStyle]="{'margin-top': '10px'}" *ngIf="showCareUnitCreationForm">
+            <fieldset class="vsm-scheduler-border" [ngStyle]="{'margin-left': '15px', 'padding-bottom': '15px'}">
+                <legend>Create Care Unit</legend>
+
+                <kpa-care-unit *ngIf="kPa()" [item]="kPaCareUnit" [isNew]="true"
+                               [postureAlarmsEnabled]="postureAlarmsEnabled()"
+                               [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
+                               (cancelEmitter)="hideCareUnitCreationForm()"
+                               (onCreateEmitter)="addToList($event)">
+                </kpa-care-unit>
+
+                <mmhg-care-unit *ngIf="!kPa()" [item]="mmHgCareUnit" [isNew]="true"
+                                [postureAlarmsEnabled]="postureAlarmsEnabled()"
+                                [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
+                                (cancelEmitter)="hideCareUnitCreationForm()"
+                                (onCreateEmitter)="addToList($event)">
+                </mmhg-care-unit>
+            </fieldset>
+        </div>
+
+        <button type="button" class="btn btn-outline-primary" (click)="showCareUnitForm()">Create Care Unit</button>
     </div>
 </div>

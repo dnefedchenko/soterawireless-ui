@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, OnInit, EventEmitter, Output} from "@angular/core";
 import {FormGroup, FormBuilder, Validators, FormControl, ValidationErrors} from "@angular/forms";
 import {ApiService} from "../../services/api.service";
 import {Response} from "@angular/http";
@@ -8,7 +8,7 @@ import {NotificationService} from "../../services/notification.service";
     selector: "mmhg-care-unit",
     styleUrls: ['care-unit.css'],
     template: `
-        <form [formGroup]="careUnitForm" (ngSubmit)="update(careUnitForm.value)">
+        <form [formGroup]="careUnitForm" (ngSubmit)="saveOrUpdate(careUnitForm.value)">
         
             <!--<div>Form value: {{ careUnitForm.value | json }}</div><br/>-->
             <div>Form status: {{ careUnitForm.status | json }}</div>
@@ -121,10 +121,15 @@ import {NotificationService} from "../../services/notification.service";
                 </div>
             </div>
             
-            <div>
+            <div *ngIf="!isNew">
                 <button type="submit" class="btn btn-primary" [disabled]="!careUnitForm.valid">Update</button>
                 <button type="button" class="btn btn-primary float-right" [disabled]="!careUnitForm.valid">Duplicate</button>
                 <button type="button" class="btn btn-primary float-right" [ngStyle]="{'margin-right': '5px'}" [disabled]="!careUnitForm.valid">Remove</button>
+            </div>
+            
+            <div *ngIf="isNew">
+                <button type="submit" class="btn btn-outline-primary" [disabled]="!careUnitForm.valid">Save</button>
+                <button type="button" class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
             </div>
             
         </form>
@@ -132,8 +137,14 @@ import {NotificationService} from "../../services/notification.service";
 })
 export class MmHgCareUnitComponent implements OnInit {
     @Input() item: any;
+    @Input() isNew: boolean;
     @Input() postureAlarmsEnabled: boolean;
     @Input() ltaAlarmsEnabled: boolean;
+
+    @Output() cancelEmitter: EventEmitter<any>;
+    @Output() onCreateEmitter: EventEmitter<any>;
+    @Output() onUpdateEmitter: EventEmitter<any>;
+    @Output() onDeleteEmitter: EventEmitter<any>;
 
     HR_PR_LOW_THRESHOLD: number = 30;
     HR_PR_HIGH_THRESHOLD: number = 240;
@@ -167,6 +178,11 @@ export class MmHgCareUnitComponent implements OnInit {
             {name: 'On'},
             {name: 'Off'}
         ];
+
+        this.cancelEmitter = new EventEmitter();
+        this.onCreateEmitter = new EventEmitter();
+        this.onUpdateEmitter = new EventEmitter();
+        this.onDeleteEmitter = new EventEmitter();
     }
 
     ngOnInit():void {
@@ -201,13 +217,39 @@ export class MmHgCareUnitComponent implements OnInit {
         return controls;
     }
 
-    update(careUnit: any) {
+    saveOrUpdate(careUnit: any) {
         this.prepareFormBeforeUpdate(careUnit);
+
+        if (this.isNew) {
+            this.save(careUnit);
+        } else {
+            this.update(careUnit);
+        }
+
+
+    }
+
+    private save(careUnit: any): void {
+        this.apiService
+            .post("/care-units", careUnit)
+            .subscribe(
+                (response: Response) => {
+                    this.notificationService.showSuccessNotification(careUnit.name.concat(" has been created successfully"), "Create");
+                    this.onCreateEmitter.emit(response.json());
+                },
+                (error: any) => {
+                    this.notificationService.showErrorNotification("Failed to update ".concat(careUnit.name), "Create");
+                }
+            );
+    }
+
+    private update(careUnit: any): void {
         this.apiService
             .put("/care-units", careUnit)
             .subscribe(
                 (response: Response) => {
                     this.notificationService.showSuccessNotification(careUnit.name.concat(" has been updated successfully"), "Update");
+                    this.onUpdateEmitter.emit(response.json());
                 },
                 (error: any) => {
                     this.notificationService.showErrorNotification("Failed to update ".concat(careUnit.name), "Update");
@@ -354,5 +396,23 @@ export class MmHgCareUnitComponent implements OnInit {
 
     private clearConditionError(alarm: any): void {
         alarm[this.CONDITION_ERROR_PROPERTY_NAME] = undefined;
+    }
+
+    cancel(): void {
+        this.cancelEmitter.emit();
+    }
+
+    remove(): void {
+        this.apiService
+            .delete(`/care-units/${this.item.id}`)
+            .subscribe(
+                (response: Response) => {
+                    this.notificationService.showSuccessNotification(`${this.item.name} has been deleted`, "Delete")
+                    this.onDeleteEmitter.emit(this.item.id);
+                },
+                (error: any) => {
+                    this.notificationService.showErrorNotification(`Failed to delete ${this.item.name}`, "Delete");
+                }
+            );
     }
 }

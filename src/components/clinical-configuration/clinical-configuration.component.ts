@@ -44,6 +44,10 @@ export class ClinicalConfigurationComponent implements OnInit {
 
     careUnits: Array<any> = [];
 
+    showCareUnitCreationForm: boolean = false;
+    mmHgCareUnit: any;
+    kPaCareUnit: any;
+
     constructor(private apiService: ApiService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
         this.temperatureUnitOptions = [
             {name: 'Celsius'},
@@ -100,6 +104,46 @@ export class ClinicalConfigurationComponent implements OnInit {
 
         this.locationsUploader = new FileUploader({url: environment.apiUrl.concat('/upload-locations')});
         this.configurationUploader = new FileUploader({url: environment.apiUrl.concat('/upload-configuration')});
+
+        this.mmHgCareUnit = {
+            "name": "",
+            "alarmLimits": [
+                {"label": "HR/PR (BPM)", "low": "30", "high": "150", "lowBoundary": "30", "highBoundary": "200"},
+                {"label": "Systolic BP", "low": "OFF", "high": "190", "lowBoundary": "70", "highBoundary": "240"},
+                {"label": "Diastolic BP", "low": "OFF", "high": "OFF", "lowBoundary": "40", "highBoundary": "150"},
+                {"label": "MAP", "low": "60", "high": "OFF", "lowBoundary": "58", "highBoundary": "170"},
+                {"label": "Respiration", "low": "4", "high": "35", "lowBoundary": "4", "highBoundary": "40"},
+                {"label": "SpO2", "low": "85", "high": "", "lowBoundary": "80", "highBoundary": ""}
+            ],
+            "fallDetection": false,
+            "inactivityAlarm": false,
+            "enabled": true,
+            "afibCvrEnabled": false,
+            "afibRvrEnabled": false,
+            "afibRvrHeartRateLimit": 100,
+            "vtachVfibEnabled": false,
+            "asysEnabled": true
+        };
+
+        this.kPaCareUnit = {
+            "name": "",
+            "alarmLimits": [
+                {"label": "HR/PR (BPM)", "low": "30", "high": "150", "lowBoundary": "30", "highBoundary": "200"},
+                {"label": "Systolic BP", "low": "OFF", "high": "25.3", "lowBoundary": "8.0", "highBoundary": "31.9"},
+                {"label": "Diastolic BP", "low": "OFF", "high": "OFF", "lowBoundary": "5.4", "highBoundary": "21.3"},
+                {"label": "MAP", "low": "8.0", "high": "OFF", "lowBoundary": "6.7", "highBoundary": "24.6"},
+                {"label": "Respiration", "low": "4", "high": "35", "lowBoundary": "4", "highBoundary": "40"},
+                {"label": "SpO2", "low": "85", "high": "", "lowBoundary": "80", "highBoundary": ""}
+            ],
+            "fallDetection": false,
+            "inactivityAlarm": false,
+            "enabled": true,
+            "afibCvrEnabled": false,
+            "afibRvrEnabled": false,
+            "afibRvrHeartRateLimit": 100,
+            "vtachVfibEnabled": false,
+            "asysEnabled": true
+        };
     }
 
     ngOnInit(): void {
@@ -277,5 +321,28 @@ export class ClinicalConfigurationComponent implements OnInit {
                     this.notificationService.showErrorNotification("Failed to load care units", "Failure");
                 }
             );
+    }
+
+    showCareUnitForm(): void {
+        this.showCareUnitCreationForm = true;
+    }
+
+    hideCareUnitCreationForm(): void {
+        this.showCareUnitCreationForm = false;
+    }
+
+    addToList(careUnit: any): void {
+        this.careUnits.push(careUnit);
+        this.hideCareUnitCreationForm();
+    }
+
+    updateList(careUnit: any): void {
+        this.careUnits = this.careUnits.filter(item => item.id !== careUnit.id)
+        this.careUnits.push(careUnit);
+        this.hideCareUnitCreationForm();
+    }
+
+    removeFromList(id: string): void {
+        this.careUnits = this.careUnits.filter(item => item.id !== id);
     }
 }
