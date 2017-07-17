@@ -112,7 +112,10 @@ export class MmHgCareUnitComponent implements OnInit {
     }
 
     private validate(alarms: Array<any>) {
-        alarms.forEach(alarm => this.validateAlarm(alarm));
+        alarms.forEach(alarm => {
+            this.validateBoundaries(alarm);
+            this.validateCondition(alarm);
+        });
 
         if (!alarms.every(this.isValid.bind(this))) {
             this.toggleFormValidity({alarmsValidationFailed: true})
@@ -125,16 +128,12 @@ export class MmHgCareUnitComponent implements OnInit {
         this.careUnitForm.get("alarmLimits").setErrors(validity);
     }
 
-    private validateAlarm(alarm: any): boolean {
-        return this.validateBoundaries(alarm) && this.validateCondition(alarm);
-    }
-
     isValid(alarm: any) {
         return alarm[this.BOUNDARY_ERROR_PROPERTY_NAME] === undefined
             && alarm[this.CONDITION_ERROR_PROPERTY_NAME] === undefined;
     }
 
-    private validateBoundaries(alarm: any): boolean {
+    private validateBoundaries(alarm: any) {
         let lowBoundary: number = new Number(alarm.lowBoundary).valueOf();
         let highBoundary: number = new Number(alarm.highBoundary).valueOf();
         let label: string = alarm.label;
@@ -175,8 +174,6 @@ export class MmHgCareUnitComponent implements OnInit {
         } else {
             this.clearBoundaryError(alarm);
         }
-
-        return boundariesValid;
     }
 
     private setBoundaryError(alarm: any):void {
@@ -229,8 +226,6 @@ export class MmHgCareUnitComponent implements OnInit {
         } else {
             this.clearConditionError(alarm);
         }
-
-        return conditionValid;
     }
 
     private setConditionError(alarm: any): void {

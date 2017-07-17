@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, Output, EventEmitter} from "@angular/core";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ApiService} from "../../services/api.service";
-import {Response} from "@angular/http";
 import {NotificationService} from "../../services/notification.service";
 import {CareUnitService} from "../../services/care.unit.service";
 
@@ -63,7 +62,7 @@ export class KpaCareUnitComponent implements OnInit {
         this.onDuplicateEmitter = new EventEmitter();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.careUnitForm = this.formBuilder.group({
             id: [this.item.id],
             name: [this.item.name, Validators.required],
@@ -102,8 +101,8 @@ export class KpaCareUnitComponent implements OnInit {
     }
 
     private prepareFormBeforeUpdate(careUnit: any) {
-        careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name: this.options[1].name;
-        careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name: this.options[1].name;
+        careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name : this.options[1].name;
+        careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name : this.options[1].name;
     }
 
     private watchAlarmLimits(): void {
@@ -113,7 +112,10 @@ export class KpaCareUnitComponent implements OnInit {
     }
 
     private validate(alarms: Array<any>) {
-        alarms.forEach(alarm => this.validateAlarm(alarm));
+        alarms.forEach(alarm => {
+            this.validateBoundaries(alarm);
+            this.validateCondition(alarm);
+        });
 
         if (!alarms.every(this.isValid.bind(this))) {
             this.toggleFormValidity({alarmsValidationFailed: true})
@@ -126,16 +128,12 @@ export class KpaCareUnitComponent implements OnInit {
         this.careUnitForm.get("alarmLimits").setErrors(validity);
     }
 
-    private validateAlarm(alarm: any): boolean {
-        return this.validateBoundaries(alarm) && this.validateCondition(alarm);
-    }
-
     isValid(alarm: any) {
         return alarm[this.BOUNDARY_ERROR_PROPERTY_NAME] === undefined
             && alarm[this.CONDITION_ERROR_PROPERTY_NAME] === undefined;
     }
 
-    private validateBoundaries(alarm: any): boolean {
+    private validateBoundaries(alarm: any) {
         let lowBoundary: number = new Number(alarm.lowBoundary).valueOf();
         let highBoundary: number = new Number(alarm.highBoundary).valueOf();
         let label: string = alarm.label;
@@ -176,11 +174,9 @@ export class KpaCareUnitComponent implements OnInit {
         } else {
             this.clearBoundaryError(alarm);
         }
-
-        return boundariesValid;
     }
 
-    private setBoundaryError(alarm: any):void {
+    private setBoundaryError(alarm: any): void {
         let message: string = "Value should be in range ";
         if (alarm.label === this.HR_PR_LABEL) {
             message = message.concat("30...240");
@@ -230,8 +226,6 @@ export class KpaCareUnitComponent implements OnInit {
         } else {
             this.clearConditionError(alarm);
         }
-
-        return conditionValid;
     }
 
     private setConditionError(alarm: any): void {
