@@ -1,7 +1,5 @@
 import {Component, Input, OnInit, Output, EventEmitter} from "@angular/core";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {ApiService} from "../../services/api.service";
-import {NotificationService} from "../../services/notification.service";
+import {FormGroup, FormBuilder} from "@angular/forms";
 import {CareUnitService} from "../../services/care.unit.service";
 
 @Component({
@@ -42,14 +40,12 @@ export class KpaCareUnitComponent implements OnInit {
     OXYGEN_LABEL = "SpO2";
 
     BOUNDARY_ERROR_PROPERTY_NAME = "boundaryError";
-    CONDITION_ERROR_PROPERTY_NAME = "conditionError";
 
     careUnitForm: FormGroup;
 
     options: Array<any> = [];
 
-    constructor(private formBuilder: FormBuilder, private careUnitService: CareUnitService,
-                private apiService: ApiService, private notificationService: NotificationService) {
+    constructor(private formBuilder: FormBuilder, private careUnitService: CareUnitService) {
         this.options = [
             {name: 'On'},
             {name: 'Off'}
@@ -63,21 +59,8 @@ export class KpaCareUnitComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.careUnitForm = this.formBuilder.group({
-            id: [this.item.id],
-            name: [this.item.name, Validators.required],
-            enabled: [this.item.enabled],
-            alarmLimits: this.formBuilder.array(this.careUnitService.buildAlarmFormControls(this.item.alarmLimits, this.formBuilder)),
-            afibCvrEnabled: [this.item.afibCvrEnabled],
-            afibRvrEnabled: [this.item.afibRvrEnabled],
-            afibRvrHeartRateLimit: [this.item.afibRvrHeartRateLimit],
-            vtachVfibEnabled: [this.item.vtachVfibEnabled],
-            asysEnabled: [this.item.asysEnabled],
-            fallDetection: [this.item.fallDetection === this.options[0].name],
-            inactivityAlarm: [this.item.inactivityAlarm === this.options[0].name]
-        });
-
-        this.watchAlarmLimits();
+        this.careUnitForm = this.careUnitService.initCareUnitForm(this.formBuilder, this.item);
+        this.careUnitService.watchAlarmLimits(this.validateBoundaries.bind(this));
     }
 
     saveOrUpdate(careUnit: any) {
@@ -88,8 +71,6 @@ export class KpaCareUnitComponent implements OnInit {
         } else {
             this.update(careUnit);
         }
-
-
     }
 
     private save(careUnit: any): void {
@@ -103,34 +84,6 @@ export class KpaCareUnitComponent implements OnInit {
     private prepareFormBeforeUpdate(careUnit: any) {
         careUnit.fallDetection = careUnit.fallDetection ? this.options[0].name : this.options[1].name;
         careUnit.inactivityAlarm = careUnit.inactivityAlarm ? this.options[0].name : this.options[1].name;
-    }
-
-    private watchAlarmLimits(): void {
-        this.careUnitForm.get("alarmLimits").valueChanges.subscribe(
-            (newArray: Array<any>) => this.validate(newArray)
-        );
-    }
-
-    private validate(alarms: Array<any>) {
-        alarms.forEach(alarm => {
-            this.validateBoundaries(alarm);
-            this.validateCondition(alarm);
-        });
-
-        if (!alarms.every(this.isValid.bind(this))) {
-            this.toggleFormValidity({alarmsValidationFailed: true})
-        } else {
-            this.toggleFormValidity(null);
-        }
-    }
-
-    private toggleFormValidity(validity: any) {
-        this.careUnitForm.get("alarmLimits").setErrors(validity);
-    }
-
-    isValid(alarm: any) {
-        return alarm[this.BOUNDARY_ERROR_PROPERTY_NAME] === undefined
-            && alarm[this.CONDITION_ERROR_PROPERTY_NAME] === undefined;
     }
 
     private validateBoundaries(alarm: any) {
@@ -197,43 +150,6 @@ export class KpaCareUnitComponent implements OnInit {
 
     private clearBoundaryError(alarm: any) {
         alarm[this.BOUNDARY_ERROR_PROPERTY_NAME] = undefined;
-    }
-
-    private validateCondition(alarm: any) {
-        let lowBoundary: number = new Number(alarm.lowBoundary).valueOf();
-        let low: number = new Number(alarm.low).valueOf();
-        let high: number = new Number(alarm.high).valueOf();
-        let highBoundary: number = new Number(alarm.highBoundary).valueOf();
-
-        let conditionValid: boolean = false;
-
-        if (!isNaN(low) && !isNaN(high) && low >= lowBoundary && high > low && high <= highBoundary) {
-            conditionValid = true;
-        } else if (!isNaN(low) && !isNaN(high) && isNaN(highBoundary) && low >= lowBoundary && high > low) {
-            conditionValid = true;
-        } else if (isNaN(low) && !isNaN(high) && high >= lowBoundary && high <= highBoundary) {
-            conditionValid = true;
-        } else if (!isNaN(low) && isNaN(high) && low >= lowBoundary && low <= highBoundary) {
-            conditionValid = true;
-        } else if (isNaN(low) && isNaN(high) && lowBoundary <= highBoundary) {
-            conditionValid = true;
-        } else if (alarm.label === this.OXYGEN_LABEL) {
-            conditionValid = low >= lowBoundary && low <= this.OXYGEN_SATURATION_HIGH_THRESHOLD;
-        }
-
-        if (!conditionValid) {
-            this.setConditionError(alarm);
-        } else {
-            this.clearConditionError(alarm);
-        }
-    }
-
-    private setConditionError(alarm: any): void {
-        alarm[this.CONDITION_ERROR_PROPERTY_NAME] = "Value should satisfy condition low_boundary <= low < high <= high_boundary";
-    }
-
-    private clearConditionError(alarm: any): void {
-        alarm[this.CONDITION_ERROR_PROPERTY_NAME] = undefined;
     }
 
     cancel(): void {
