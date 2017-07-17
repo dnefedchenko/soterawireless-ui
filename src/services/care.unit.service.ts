@@ -159,4 +159,12 @@ export class CareUnitService {
     private clearConditionError(alarm: any): void {
         alarm[this.CONDITION_ERROR_PROPERTY_NAME] = undefined;
     }
+
+    public toggleNameValidity(): void {
+        if (this.careUnitForm.value.nameUniquenessError) {
+            this.careUnitForm.get("name").setErrors({nameUniquenessError: true});
+        } else {
+            this.careUnitForm.get("name").setErrors(null);
+        }
+    }
 }

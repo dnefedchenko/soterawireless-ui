@@ -18,6 +18,7 @@ export class KpaCareUnitComponent implements OnInit {
     @Output() onUpdateEmitter: EventEmitter<any>;
     @Output() onDeleteEmitter: EventEmitter<any>;
     @Output() onDuplicateEmitter: EventEmitter<any>;
+    @Output() nameEmitter: EventEmitter<string>;
 
     HR_PR_LOW_THRESHOLD: number = 30;
     HR_PR_HIGH_THRESHOLD: number = 240;
@@ -56,6 +57,7 @@ export class KpaCareUnitComponent implements OnInit {
         this.onUpdateEmitter = new EventEmitter();
         this.onDeleteEmitter = new EventEmitter();
         this.onDuplicateEmitter = new EventEmitter();
+        this.nameEmitter = new EventEmitter();
     }
 
     ngOnInit(): void {
@@ -162,5 +164,10 @@ export class KpaCareUnitComponent implements OnInit {
 
     duplicate(): void {
         this.onDuplicateEmitter.emit(this.careUnitForm.value);
+    }
+
+    validateName(): void {
+        this.nameEmitter.emit(this.careUnitForm.value);
+        this.careUnitService.toggleNameValidity();
     }
 }

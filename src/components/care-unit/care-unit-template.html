@@ -1,10 +1,18 @@
 <form [formGroup]="careUnitForm" (ngSubmit)="saveOrUpdate(careUnitForm.value)">
-    <input type="text" class="form-control vsm-care-unit-name-input" formControlName="name"/>
+    <input type="text" class="form-control vsm-care-unit-name-input" formControlName="name" (blur)="validateName()"/>
     <div class="form-group">
         <div class="vsm-checkbox vsm-care-unit-enabled">
             <input id="careUnitEnabled" type="checkbox" formControlName="enabled">
             <label for="careUnitEnabled" class="vsm-label blue">&nbsp;Enabled</label>
         </div>
+    </div>
+
+    <div class="form-group" *ngIf="careUnitForm.get('name').hasError('required')">
+        <span class="error-message">Required field</span>
+    </div>
+
+    <div class="form-group" *ngIf="careUnitForm.value.nameUniquenessError">
+        <span class="error-message">{{careUnitForm.value.nameUniquenessError}}</span>
     </div>
 
     <h4>Alarm Settings</h4>
@@ -70,8 +78,8 @@
                 <div class="form-inline vsm-heart-rate-input">
                     <div class="form-group">
                         <label for="newHeartRateLimit-{{item.id}}">Limit:&nbsp;</label>
-                        <input id="newHeartRateLimit-{{item.id}}" type="number" class="form-control" min="0" max="255" formControlName="afibRvrHeartRateLimit">
-                        <span *ngIf="careUnitForm.get('afibRvrHeartRateLimit').value > 255" class="error-message">Value should be in range 0...255</span>
+                        <input id="newHeartRateLimit-{{item.id}}" type="number" class="form-control" min="0" max="255" formControlName="afibRvrHeartRateLimit"><br/>
+                        <span *ngIf="careUnitForm.get('afibRvrHeartRateLimit').value > 255" class="error-message">&nbsp;Value should be in range 0...255</span>
                     </div>
                 </div>
                 <div class="form-group vsm-margin-bottom-8">

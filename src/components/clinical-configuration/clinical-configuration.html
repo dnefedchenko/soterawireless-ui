@@ -267,7 +267,8 @@
                                            [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
                                            (onUpdateEmitter)="updateList($event)"
                                            (onDeleteEmitter)="removeFromList($event)"
-                                           (onDuplicateEmitter)="copyCareUnit($event)">
+                                           (onDuplicateEmitter)="copyCareUnit($event)"
+                                           (nameEmitter)="validateName($event)">
                             </kpa-care-unit>
 
                             <mmhg-care-unit *ngIf="!kPa()" [item]="careUnit" [isNew]="false"
@@ -275,7 +276,8 @@
                                        [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
                                        (onUpdateEmitter)="updateList($event)"
                                        (onDeleteEmitter)="removeFromList($event)"
-                                       (onDuplicateEmitter)="copyCareUnit($event)">
+                                       (onDuplicateEmitter)="copyCareUnit($event)"
+                                       (nameEmitter)="validateName($event)">
                             </mmhg-care-unit>
                         </ng-template>
                     </ngb-panel>
@@ -291,14 +293,16 @@
                                [postureAlarmsEnabled]="postureAlarmsEnabled()"
                                [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
                                (cancelEmitter)="hideCareUnitCreationForm()"
-                               (onCreateEmitter)="addToList($event)">
+                               (onCreateEmitter)="addToList($event)"
+                               (nameEmitter)="validateName($event)">
                 </kpa-care-unit>
 
                 <mmhg-care-unit *ngIf="!kPa()" [item]="mmHgCareUnit" [isNew]="true"
                                 [postureAlarmsEnabled]="postureAlarmsEnabled()"
                                 [ltaAlarmsEnabled]="arrhythmiaAlarmsEnabled()"
                                 (cancelEmitter)="hideCareUnitCreationForm()"
-                                (onCreateEmitter)="addToList($event)">
+                                (onCreateEmitter)="addToList($event)"
+                                (nameEmitter)="validateName($event)">
                 </mmhg-care-unit>
             </fieldset>
         </div>

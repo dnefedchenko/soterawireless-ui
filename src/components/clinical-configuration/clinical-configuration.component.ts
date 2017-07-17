@@ -364,4 +364,12 @@ export class ClinicalConfigurationComponent implements OnInit {
         }
         this.showCareUnitForm();
     }
+
+    validateName(careUnit: any): void {
+        let isNameUnique = this.careUnits.every((item: any) => {
+            return (careUnit && careUnit.id !== item.id && careUnit.name.toUpperCase() !== item.name.toUpperCase())
+                || (careUnit && careUnit.id === item.id && careUnit.name.toUpperCase() === item.name.toUpperCase());
+        });
+        careUnit["nameUniquenessError"] = isNameUnique ? undefined:  "Care Unit with the same name already exists";
+    }
 }
