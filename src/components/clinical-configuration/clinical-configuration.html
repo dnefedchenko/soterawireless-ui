@@ -150,9 +150,9 @@
 
             <button type="submit" class="btn btn-outline-primary" [disabled]="!facilityForm.valid" *ngIf="facilityExists()">Update</button>
             <button type="submit" class="btn btn-outline-primary" [disabled]="!facilityForm.valid" *ngIf="!facilityExists()">Create</button>
-            <button type="button" class="btn btn-outline-primary">Publish</button>
-            <button type="button" class="btn btn-outline-primary">PDF</button>
-            <button type="button" class="btn btn-outline-primary">Export</button>
+            <button type="button" class="btn btn-outline-primary" (click)="publishUpdates()">Publish</button>
+            <button type="button" class="btn btn-outline-primary" (click)="downloadPdf()">PDF</button>
+            <a type="button" class="btn btn-outline-primary" href="{{exportUrl}}" download="configuration.json">Export</a>
         </form>
 
         <div class="row" [ngStyle]="{'margin-top': '10px'}" *ngIf="facilityExists()">

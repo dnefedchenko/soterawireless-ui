@@ -5,6 +5,7 @@ import {Response} from "@angular/http";
 import {NotificationService} from "../../services/notification.service";
 import {FileUploader} from "ng2-file-upload/index";
 import {environment} from "../../environments/environment";
+import {WindowRef} from "../../services/window.service";
 
 function pinValidator(control: FormControl): {[s: string]: boolean} {
     if (control && !control.value.match(/^\d{4,8}$/)) {
@@ -48,7 +49,10 @@ export class ClinicalConfigurationComponent implements OnInit {
     mmHgCareUnit: any;
     kPaCareUnit: any;
 
-    constructor(private apiService: ApiService, private notificationService: NotificationService, private formBuilder: FormBuilder) {
+    exportUrl: string;
+
+    constructor(private apiService: ApiService, private notificationService: NotificationService,
+                private formBuilder: FormBuilder, private windowRef: WindowRef) {
         this.temperatureUnitOptions = [
             {name: 'Celsius'},
             {name: 'Fahrenheit'}
@@ -301,6 +305,23 @@ export class ClinicalConfigurationComponent implements OnInit {
         this.facilityForm.get('respirationDisplay').setValue(this.facilityForm.get('respirationDisplay').value ? 'On' : 'Off');
     }
 
+    publishUpdates(): void {
+        this.apiService
+            .put("/configuration/update")
+            .subscribe(
+                (response: Response) => {
+                    this.notificationService.showSuccessNotification("Configuration updates have been successfully sent", "Success");
+                },
+                (error: any) => {
+                    this.notificationService.showErrorNotification("Failed to send configuration updates", "Failure");
+                }
+            );
+    }
+
+    downloadPdf(): void {
+
+    }
+
     public locationDropOver(e:any):void {
         this.hasLocationDropOver = e;
     }
@@ -323,6 +344,7 @@ export class ClinicalConfigurationComponent implements OnInit {
             .subscribe(
                 (response: Response) => {
                     this.careUnits = response.json();
+                    this.prepareExportConfiguration();
                 },
                 (error: any) => {
                     this.notificationService.showErrorNotification("Failed to load care units", "Failure");
@@ -371,5 +393,10 @@ export class ClinicalConfigurationComponent implements OnInit {
                 || (careUnit && careUnit.id === item.id && careUnit.name.toUpperCase() === item.name.toUpperCase());
         });
         careUnit["nameUniquenessError"] = isNameUnique ? undefined:  "Care Unit with the same name already exists";
+    }
+
+    private prepareExportConfiguration() {
+        let blob = new Blob([JSON.stringify({"facility": this.facility})], { type : 'application/json' });
+        this.exportUrl = (this.windowRef.getWindow().URL || this.windowRef.getWindow().webkitURL).createObjectURL(blob)
     }
 }

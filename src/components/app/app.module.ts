@@ -22,6 +22,7 @@ import {MmHgCareUnitComponent} from "../care-unit/mmhg.care.unit.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {KpaCareUnitComponent} from "../care-unit/kpa.care.unit.component";
 import {CareUnitService} from "../../services/care.unit.service";
+import {WindowRef} from "../../services/window.service";
 
 
 
@@ -92,6 +93,7 @@ export function careUnitServiceFactory(apiService: ApiService, notificationServi
             deps: [ApiService, NotificationService]
         },
         {provide: RouterGuard, useClass: RouterGuard},
+        {provide: WindowRef, useClass: WindowRef},
         {provide: LocationStrategy, useClass: HashLocationStrategy}
     ],
     bootstrap: [VsmAppComponent]
